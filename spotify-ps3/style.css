@@ -1,151 +1,151 @@
-/*NEW RESPONSIVE DESIGN*/
-body{
+/* BASE */
+body {
     overflow: hidden;
     font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #172822; /* Color base sólido, el gradiente lo ponemos en .bg */
+    color: #fff;
 }
-.bg{
+
+.bg {
     position: fixed;
-    background: #172822;
-    background: -webkit-linear-gradient(144deg, rgba(23, 40, 34, 1) 0%, rgba(55, 97, 95, 1) 50%, rgba(25, 37, 25, 1) 80%, rgba(21, 27, 13, 1) 100%);
-    background: -moz-linear-gradient(144deg, rgba(23, 40, 34, 1) 0%, rgba(55, 97, 95, 1) 50%, rgba(25, 37, 25, 1) 80%, rgba(21, 27, 13, 1) 100%);
-    background: linear-gradient(144deg, rgba(23, 40, 34, 1) 0%, rgba(55, 97, 95, 1) 50%, rgba(25, 37, 25, 1) 80%, rgba(21, 27, 13, 1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#172822", endColorstr="#151B0D", GradientType=0);
-    background-size: cover;
-    color: #fff; 
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    background: #172822;
+    /* Gradiente compatible con WebKit viejo (PS3) */
+    background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#172822), color-stop(50%,#37615f), color-stop(80%,#192519), color-stop(100%,#151b0d));
+    background: #172822; /* fallback */
     z-index: -1;
 }
-input{ 
-    width: 400px; padding: 12px; font-size: 18px; 
+
+input {
+    width: 400px;
+    padding: 12px;
+    font-size: 18px;
 }
-#loginBtn{ 
-    padding: 12px 24px; font-size: 18px; margin: 10px 0; 
-    background: #1db95400; 
-    color: white; 
-    border: 3px solid white; 
-    border-radius: 50px; 
+
+/* BOTÓN LOGIN */
+#loginBtn {
+    padding: 12px 24px;
+    font-size: 18px;
+    margin: 10px 0;
+    background: transparent;
+    color: white;
+    border: 3px solid white;
+    -webkit-border-radius: 50px;
+    border-radius: 50px;
     position: absolute;
-    bottom: 10vh;
     left: 50%;
+    -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
 }
-ul{ 
-    list-style: none; padding: 0; 
-}
-li{ 
-    margin: 10px 0; padding: 15px; background: #222; border-radius: 8px; 
-}
-.playing{ color: #1DB954; font-weight: bold; margin: 20px 0; }
-header{
+
+/* HEADER */
+header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    padding-bottom: 200px;
-    display: flex;
+    z-index: 100;
 }
-header img[alt="logo"]{
-    height: 10vh;
-    margin-top: 6vh;
+
+header img[alt="logo"] {
+    height: 80px;
+    margin-top: 40px;
     margin-left: 60px;
 }
-header img.pfp{
-    height: 7vh;
-    width: 7vh;
-    border-radius: 50px;
-    background: white;
-    border-radius: 50%;
-    color: rgba(0,0,0,0);
-}
-header .right-section{
-    display: -webkit-box; /* Sintaxis antigua para WebKit (PS3, Android 2.x, Safari 3.1-6) */
-    display: -webkit-flex; /* Sintaxis intermedia (Chrome 21+, Safari 6.1-8, iOS 7-8.4) */
-    display: flex; /* Sintaxis moderna (navegadores actuales) */
 
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: row;
-    flex-direction: row;
+header img.pfp {
+    height: 60px;
+    width: 60px;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
     position: absolute;
     right: 60px;
-    top: 6vh;
+    top: 50px;
 }
-header .division{
+
+header .right-section {
+    position: absolute;
+    right: 60px;
+    top: 50px;
+}
+
+header .division {
     width: 2px;
-    height: 7vh;
+    height: 60px;
     background-color: #ffffff81;
-    margin-right: 20px;
+    position: absolute;
+    right: 160px;
+    top: 50px;
 }
-header .right-section img[alt="search-svg"]{
-    height: 6vh;
-    margin-right: 20px;
-    cursor: pointer;
+
+header img[alt="search-svg"] {
+    height: 50px;
+    position: absolute;
+    right: 200px;
+    top: 55px;
 }
-header nav{
-    margin-top: 8vh;
-    margin-left: 40px;
+
+header nav {
+    position: absolute;
+    left: 200px;
+    top: 80px;
 }
-header nav button{
+
+header nav button {
     background: none;
     border: none;
     color: #495c5a;
-    font-size: 2rem;
+    font-size: 32px;
     margin-right: 30px;
     padding-bottom: 10px;
-    cursor: pointer;
 }
-header nav button.sel{
+
+header nav button.sel {
     border-bottom: 2px solid white;
     font-weight: bold;
     color: white;
 }
-#main{
+
+/* MAIN CONTENT */
+#main {
     position: absolute;
     top: 160px;
     left: 60px;
-    color: white;
-    transition: left 0.5s ease;
+    width: 90%;
 }
-.title{
+
+.title {
     font-size: 24px;
     margin-bottom: 20px;
     letter-spacing: 5px;
     font-weight: 300;
 }
+
+/* WARNING MODAL (PS3 style) */
 .warning-modal {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: rgba(0,0,0,0.85);
     z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.warning-content {
     text-align: center;
-    color: #ccc;
-    font-size: 20px;
-    max-width: 80%;
+    padding-top: 200px;
 }
 
 .warning-text {
+    font-size: 20px;
+    color: #ccc;
     margin-bottom: 40px;
-    line-height: 1.5;
-}
-
-.error-text {
-    color: #ff6666; /* Rojo sutil para errors */
-    font-weight: bold;
-    margin: 20px 0;
 }
 
 .warning-line {
-    border: none;
     border-top: 2px solid #fff;
     width: 60%;
     margin: 40px auto;
@@ -157,181 +157,125 @@ header nav button.sel{
     padding: 15px 50px;
     color: #fff;
     font-size: 24px;
-    cursor: pointer;
 }
 
-.x-icon {
-    color: #7ba6da; /* Azul PS3 clásico */
-    margin-right: 10px;
-    font-size: 28px;
-    background: #4f4f4f;
-    width: 35px;
-    height: 35px;
-    display: inline-block;
-    border-radius: 50px;
+/* POPULAR PLAYLISTS - Usamos floats en vez de grid */
+#popularPlaylists {
+    overflow: hidden;
+    width: 100%;
 }
-#popularPlaylists{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 1fr); 
-}
-.playlist-item{
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    cursor: pointer;
-    width: 50vh;
-    height: 25vh;
-    background: #222222;
-    margin-right: 20px;
-}
-.playlist-item img{
-    height: 25vh;
-    width: 25vh;
-    margin-right: 20px;
-}
-.data-playlist-container{
-    display: flex;
-    flex-direction: column;
-    /*align items to the bottom*/
-    justify-content: flex-end;
-    height: 100%;
-}
-.container--{
-    display: flex;
-    flex-direction: row;
+
+.playlist-item {
+    float: left;
+    width: 400px;
+    height: 200px;
+    margin-right: 40px;
     margin-bottom: 40px;
+    background: #222222;
+    position: relative;
 }
-.track-count{
+
+.playlist-item img {
+    width: 200px;
+    height: 200px;
+    float: left;
+}
+
+.data-playlist-container {
+    position: absolute;
+    left: 220px;
+    top: 0;
+    height: 200px;
+    display: table;
+}
+
+.data-playlist-container > div {
+    display: table-cell;
+    vertical-align: bottom;
+    padding-bottom: 20px;
+}
+
+.playlist-title {
+    font-size: 20px;
+    margin: 0;
+}
+
+.track-count {
     color: #888888;
     font-size: 14px;
     margin-top: 5px;
 }
-.container-- .division{
-    width: 2px;
-    height: auto;
-    background-color: #495c5a;
-    margin: 0 40px;
-}
-.container-- .--section:not(.highlighted){
-    opacity: .8;
-}
-#popularPlaylists .more-button{
+
+.more-button {
     background: none;
-    width: 8vw;
-    height: 8vw;
-    padding: 10px 20px;
+    width: 120px;
+    height: 120px;
     font-size: 22px;
-    cursor: pointer;
-    align-self: center;
-    justify-self: center;
-    border-radius: 50%;
     border: 2px solid #4b5a55;
     color: #4b5a55;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
     letter-spacing: 3px;
-}
-.navigable {
-    outline: none; /* Quita outline feo por defecto */
-    transition: all 0.2s ease;
-}
-
-.navigable.keyboard-focus {
-    outline: 3px solid #1DB954; /* Verde Spotify brillante */
-    outline-offset: 4px;
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(29, 185, 84, 0.5);
-    z-index: 10;
-    position: relative;
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    margin-left: -60px;
 }
 
-/* Opcional: para playlists, hacer el foco más grande */
-.playlist-item.keyboard-focus {
-    transform: scale(1.08);
-}
-
-header nav button.keyboard-focus{
-    border-bottom: 2px solid white;
-    font-weight: bold;
-    color: white;
-}
-.playing-footer{
-    position: fixed;
-    bottom: 5vh;
-    left: 5vh;
-}
-nav button.keyboard-focus,
-.search-icon.keyboard-focus {
-    outline: 3px solid #1DB954;
-    outline-offset: 4px;
-    border-radius: 8px;
-}
-
-.search-icon.keyboard-focus {
-    filter: brightness(1.5) drop-shadow(0 0 10px #1DB954);
-}
+/* TOP GENRES - Floats en vez de grid */
 #topGenres {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: repeat(2, 1fr); 
+    overflow: hidden;
+    width: 100%;
 }
 
 .genre-card {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    cursor: pointer;
-    width: 25vh;
-    height: 25vh;
+    float: left;
+    width: 200px;
+    height: 200px;
+    margin-right: 40px;
+    margin-bottom: 40px;
     background: #222222;
-    margin-right: 20px;
+    position: relative;
     text-align: center;
 }
 
-.genre-tag.keyboard-focus {
-    outline: 3px solid #1DB954;
-    outline-offset: 4px;
-}
 .genre-name {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
     font-size: 20px;
     font-weight: bold;
     color: white;
     text-shadow: 0 2px 8px black;
-    z-index: 2;
 }
 
+/* YOUR MUSIC - LIKED SONGS */
 #myFavouriteSongsSection {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    padding: 10px 20px;
+    overflow: hidden;
+    width: 100%;
 }
 
 .liked-song-item {
-    /* display: flex; */
-    /* align-items: center; */
-    /* gap: 16px; */
-    /* padding: 10px; */
+    float: left;
+    width: 400px;
+    height: 400px;
+    margin-right: 40px;
+    margin-bottom: 40px;
     background: rgba(255, 255, 255, 0.05);
-    /* border-radius: 8px; */
-    transition: background 0.3s;
-    height: 50vh;
-    width: 50vh;
-    /* text-align: center; */
-}
-
-.liked-song-item.keyboard-focus {
-    background: rgba(30, 215, 96, 0.3) !important;
-    outline: 2px solid #1DB954;
+    position: relative;
+    text-align: center;
 }
 
 .liked-song-cover {
-    width: 100%;
-    height: 100%;
+    width: 400px;
+    height: 400px;
 }
 
 .liked-song-info {
-    flex: 1;
-    overflow: hidden;
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    left: 0;
 }
 
 .liked-song-title {
@@ -341,38 +285,61 @@ nav button.keyboard-focus,
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding: 0 20px;
 }
 
 .liked-song-artist {
-    font-size: 16px;
+    font-size: 20px;
     color: #b3b3b3;
-    margin: 4px 0 0 0;
+    margin: 10px 0 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding: 0 20px;
 }
-#yourmusic{
+
+#yourmusic {
     position: absolute;
     top: 160px;
-    left: 200vw;
-    color: white;
-    transition: left 0.5s ease;
+    left: 2000px; /* Fuera de pantalla, lo mueves con JS */
+    width: 90%;
+    transition: none; /* PS3 no soporta transition bien */
 }
-#login{
+
+/* NAVEGACIÓN POR TECLADO (compatible) */
+.navigable.keyboard-focus {
+    outline: 4px solid #1DB954 !important;
+    background: rgba(30, 215, 96, 0.4) !important;
+}
+
+/* LOGIN SCREEN */
+#login {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: url(./src/img/welcome-bg.jpg) no-repeat center center fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url(./src/img/welcome-bg.jpg) no-repeat center center;
     background-size: cover;
     z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
+    padding-top: 200px;
 }
-#login .logo{
-    width: 25vw;
+
+#login .logo {
+    width: 300px;
     position: absolute;
-    top: 5vh;
-    margin-bottom: 40px;
+    top: 50px;
+    left: 50%;
+    margin-left: -150px;
+}
+
+/* LIMPIAR FLOATS */
+.container--:after,
+#popularPlaylists:after,
+#topGenres:after,
+#myFavouriteSongsSection:after {
+    content: "";
+    display: table;
+    clear: both;
 }
