@@ -34,23 +34,36 @@ function login() {
 }
 
 
-function apiCall(endpoint, method = 'GET', body, callback) {
-    const xhr = new XMLHttpRequest();
-    xhr.open(method, 'https://api.spotify.com/v1' + endpoint, true);
-    xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-    if (body) xhr.setRequestHeader('Content-Type', 'application/json');
+function apiCall(endpoint, method, body, callback) {
+    if (!accessToken) return;
 
-    xhr.onload = function () {
+    const xhr = new XMLHttpRequest();
+    xhr.open(method || 'GET', 'https://api.spotify.com/v1' + endpoint, true);
+    xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+
+    if (body) {
+        xhr.setRequestHeader('Content-Type', 'application/json');
+    }
+
+    xhr.onload = function() {
         if (xhr.status >= 200 && xhr.status < 300) {
-            callback(JSON.parse(xhr.responseText));
+            try {
+                callback(JSON.parse(xhr.responseText));
+            } catch(e) {
+                callback({});
+            }
         } else {
-            showWarning('Spotify error: ' + xhr.status);
             if (xhr.status === 401) {
+                // Token expirado → volver a login
                 setTimeout(login, 2000);
             }
         }
     };
-    xhr.onerror = () => showWarning('Network error during Spotify API call');
+
+    xhr.onerror = function() {
+        showWarning('Network error during API call');
+    };
+
     xhr.send(body ? JSON.stringify(body) : null);
 }
 async function exchangeCodeForToken(code) {
@@ -329,16 +342,15 @@ function loadLikedSongs() {
         setTimeout(initOrRefreshKeyboardNavigation, 500);
     });
 }
-// ====== DEVICE AND PROFILE ======
 function getActiveDevice() {
     apiCall('/me/player/devices', 'GET', null, function(data) {
-        var active = data.devices.find(d => d.is_active);
+        const active = data.devices ? data.devices.find(d => d.is_active) : null;
         if (active) {
             deviceId = active.id;
             document.getElementById('deviceName').textContent = active.name + ' (' + active.type + ')';
         } else {
-            document.getElementById('deviceName').textContent = 'No active device';
-        } // Detects and displays the currently active playback device
+            document.getElementById('deviceName').textContent = 'Ninguno activo';
+        }
     });
 }
 function populateUI(profile) {
@@ -346,11 +358,12 @@ function populateUI(profile) {
         document.querySelector(".pfp").src = profile.images[0].url; // Sets the user's profile picture in the header
     }
 }
-async function fetchProfile() {
-    const res = await fetch("https://api.spotify.com/v1/me", {
-        headers: { Authorization: 'Bearer ' + accessToken }
+function fetchProfile() {
+    apiCall('/me', 'GET', null, function(profile) {
+        if (profile.images && profile.images[0]) {
+            document.querySelector(".pfp").src = profile.images[0].url;
+        }
     });
-    return await res.json(); // Fetches the authenticated user's profile data
 }
 // ====== SEARCH ======
 document.getElementById('searchBtn').onclick = function() {
@@ -530,18 +543,31 @@ document.addEventListener('keydown', function(e) {
         updateFocus();
     }
 });
-function getTokenFromUrl() {
-            const hash = window.location.hash.substring(1);
-            const params = new URLSearchParams(hash);
-            return params.get('access_token');
+function getTokenFromHash() {
+    const hash = window.location.hash.substring(1);
+    const params = {};
+    hash.split('&').forEach(pair => {
+        const [key, value] = pair.split('=');
+        params[key] = decodeURIComponent(value);
+    });
+    return params.access_token || null;
 }
 
-window.onload = function () {
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get('code');
+window.onload = function() {
+    accessToken = getTokenFromHash();
 
-    if (code) {
-        exchangeCodeForToken(code);
+    if (accessToken) {
+        history.replaceState({}, document.title, REDIRECT_URI);
+
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('main').style.display = 'block';
+
+        getActiveDevice();
+        fetchProfile();
+        loadPopularPlaylists();
+        loadTopGenres();
+        loadLikedSongs();
+        setTimeout(initOrRefreshKeyboardNavigation, 1000);
     }
 };
 function gotosection(section){
