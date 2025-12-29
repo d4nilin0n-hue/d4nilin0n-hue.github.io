@@ -101,7 +101,7 @@ async function exchangeCodeForToken(code) {
         localStorage.removeItem('code_verifier');
 
         // Oculta login y muestra la app
-        document.getElementById('loginBtn').style.display = 'none';
+        document.getElementById('login').style.display = 'none';
         document.getElementById('main').style.display = 'block';
 
         getActiveDevice();
@@ -558,11 +558,11 @@ window.onload = function () {
 function gotosection(section){
     switch(section){
         case 'yourmusic':
-            document.getElementById("main").style.left = "-200vw";
+            document.getElementById("main").style.left = "-300vw";
             document.getElementById('yourmusic').style.left = "60px";
             break;
         case 'browse':
-            document.getElementById('yourmusic').style.left = "-200vw";
+            document.getElementById('yourmusic').style.left = "300vw";
             document.getElementById('main').style.left = "60px";
             break;
     }
