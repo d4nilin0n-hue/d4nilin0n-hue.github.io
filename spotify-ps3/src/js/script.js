@@ -23,24 +23,15 @@ async function sha256(plain) {
         .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-async function login() {
-    const codeVerifier = generateRandomString(128);
-    localStorage.setItem('code_verifier', codeVerifier);
+function login() {
+    const url = 'https://accounts.spotify.com/authorize' +
+        '?client_id=' + encodeURIComponent(CLIENT_ID) +
+        '&response_type=token' +
+        '&redirect_uri=' + encodeURIComponent(REDIRECT_URI) +
+        '&scope=' + encodeURIComponent(SCOPES);
 
-    const codeChallenge = await sha256(codeVerifier);
-
-    const params = new URLSearchParams({
-        client_id: CLIENT_ID,
-        response_type: 'code',
-        redirect_uri: REDIRECT_URI,
-        code_challenge_method: 'S256',
-        code_challenge: codeChallenge,
-        scope: SCOPES
-    });
-
-    window.location = `https://accounts.spotify.com/authorize?${params.toString()}`;
+    window.location = url;
 }
-document.getElementById('loginBtn').addEventListener('click', login);
 
 
 function apiCall(endpoint, method = 'GET', body, callback) {
