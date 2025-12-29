@@ -341,3 +341,10 @@ nav button.keyboard-focus,
     overflow: hidden;
     text-overflow: ellipsis;
 }
+#yourmusic{
+    position: absolute;
+    top: 160px;
+    left: 200vw;
+    color: white;
+    transition: left 0.5s ease;
+}
