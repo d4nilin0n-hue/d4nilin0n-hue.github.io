@@ -1,5 +1,5 @@
 const CLIENT_ID = 'dcdf1b28e75a4bb1b46ba48533bddf78';
-const REDIRECT_URI = 'https://d4nilin0n-hue.github.io/index.html'; // ¡EXACTO como lo registraste en Spotify!
+const REDIRECT_URI = 'https://d4nilin0n-hue.github.io/spotify-ps3/index.html';
 const SCOPES = [
     'user-read-playback-state',
     'user-modify-playback-state',
@@ -311,7 +311,6 @@ function closeWarning() {
         }
     }, 10); // Hides the warning modal with fade-out animation
 }
-// ====== NAVEGACIÓN REIMAGINADA (FLEXIBLE Y UNIVERSAL) ======
 
 document.body.style.cursor = 'none';
 
@@ -339,7 +338,6 @@ function initOrRefreshKeyboardNavigation() {
     }
 }
 
-// Calcula el elemento más cercano en la dirección deseada
 function getNearestInDirection(direction) {
     const elements = getNavigableElements();
     if (!currentFocus || elements.length === 0) return null;
