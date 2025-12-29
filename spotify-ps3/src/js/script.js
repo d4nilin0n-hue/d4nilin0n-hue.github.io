@@ -1,5 +1,5 @@
 const CLIENT_ID = 'dcdf1b28e75a4bb1b46ba48533bddf78';
-const REDIRECT_URI = 'https://d4nilin0n-hue.github.io/spotify-ps3/index.html';
+const REDIRECT_URI = 'https://d4nilin0n-hue.github.io/spotify-ps3/index.html'; // ¡Exacto así!
 
 const SCOPES = 'user-read-playback-state user-modify-playback-state user-read-currently-playing user-library-read user-library-modify user-read-private user-top-read playlist-modify-public playlist-modify-private';
 
@@ -41,6 +41,7 @@ async function login() {
     window.location = `https://accounts.spotify.com/authorize?${params.toString()}`;
 }
 
+// Asigna el click al botón (ajústalo si tu botón tiene otro ID)
 document.getElementById('loginBtn').onclick = login;
 
 
@@ -54,7 +55,7 @@ function apiCall(endpoint, method = 'GET', body, callback) {
         if (xhr.status >= 200 && xhr.status < 300) {
             callback(JSON.parse(xhr.responseText));
         } else {
-            showWarning('Error Spotify: ' + xhr.status);
+            showWarning('Spotify error: ' + xhr.status);
             if (xhr.status === 401) {
                 setTimeout(login, 2000);
             }
@@ -63,12 +64,11 @@ function apiCall(endpoint, method = 'GET', body, callback) {
     xhr.onerror = () => showWarning('Error de red');
     xhr.send(body ? JSON.stringify(body) : null);
 }
-
 async function exchangeCodeForToken(code) {
     const codeVerifier = localStorage.getItem('code_verifier');
 
     if (!codeVerifier) {
-        showWarning('Error: Could not find code_verifier. Try to log in again.');
+        showWarning('Error: No se encontró code_verifier. Intenta login de nuevo.');
         return;
     }
 
@@ -96,9 +96,11 @@ async function exchangeCodeForToken(code) {
         const data = await response.json();
         accessToken = data.access_token;
 
+        // Limpia la URL y el storage
         history.replaceState({}, document.title, REDIRECT_URI);
         localStorage.removeItem('code_verifier');
 
+        // Oculta login y muestra la app
         document.getElementById('loginBtn').style.display = 'none';
         document.getElementById('main').style.display = 'block';
 
