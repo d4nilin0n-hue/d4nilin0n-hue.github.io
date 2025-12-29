@@ -10,7 +10,7 @@
     <header>
         <img src="./src/logo.png" alt="logo">
         <nav class="nav-links">
-            <button class="sel navigable" tabindex="0">Browse</button>
+            <button class="sel navigable" onclick="gotosection('browse')" tabindex="0">Browse</button>
             <button class="navigable" onclick="gotosection('yourmusic')" tabindex="0">Your music</button>
         </nav>
         <div class="right-section">
@@ -34,7 +34,7 @@
         <ul id="results"></ul>
     </div>
     <div id="yourmusic">
-        <p class="title">YOUR MUSIC</p>
+        <p class="title">SONGS</p>
         <div class="container--">
             <div id="myFavouriteSongsSection" class="--section"></div>
         </div>
