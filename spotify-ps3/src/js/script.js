@@ -1,60 +1,61 @@
 const CLIENT_ID = 'dcdf1b28e75a4bb1b46ba48533bddf78';
 const REDIRECT_URI = 'https://d4nilin0n-hue.github.io/spotify-ps3/index.html';
-const SCOPES = [
-    'user-read-playback-state',
-    'user-modify-playback-state',
-    'user-read-currently-playing',
-    'user-library-read',
-    'user-library-modify',
-    'user-read-private',
-    'user-top-read',
-    'playlist-modify-public',
-    'playlist-modify-private'
-].join(' ');
+
+const SCOPES = 'user-read-playback-state user-modify-playback-state user-read-currently-playing user-library-read user-library-modify user-read-private user-top-read playlist-modify-public playlist-modify-private';
 
 let accessToken = null;
 let deviceId = null;
-// ====== AUTHENTICATION ======
+
 function generateRandomString(length) {
-    var text = '';
-    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
-    for (var i = 0; i < length; i++) {
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+    for (let i = 0; i < length; i++) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
-    return text; // Generates a random string used as the PKCE code verifier
+    return text;
 }
+
 async function sha256(plain) {
     const encoder = new TextEncoder();
     const data = encoder.encode(plain);
     const hash = await crypto.subtle.digest('SHA-256', data);
     return btoa(String.fromCharCode(...new Uint8Array(hash)))
-        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); // Computes the PKCE code challenge from the code verifier
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
-function login() {
-            const url = 'https://accounts.spotify.com/authorize' +
-                '?response_type=token' +
-                '&client_id=' + encodeURIComponent(CLIENT_ID) +
-                '&scope=' + encodeURIComponent(SCOPES) +
-                '&redirect_uri=' + encodeURIComponent(REDIRECT_URI) +
-                '&show_dialog=false';
 
-            window.location = url;
-        }
+async function login() {
+    const codeVerifier = generateRandomString(128);
+    localStorage.setItem('code_verifier', codeVerifier);
 
-        document.getElementById('loginBtn').onclick = login;
+    const codeChallenge = await sha256(codeVerifier);
+
+    const params = new URLSearchParams({
+        client_id: CLIENT_ID,
+        response_type: 'code',
+        redirect_uri: REDIRECT_URI,
+        code_challenge_method: 'S256',
+        code_challenge: codeChallenge,
+        scope: SCOPES
+    });
+
+    window.location = `https://accounts.spotify.com/authorize?${params.toString()}`;
+}
+
+document.getElementById('loginBtn').onclick = login;
+
+
 function apiCall(endpoint, method = 'GET', body, callback) {
     const xhr = new XMLHttpRequest();
     xhr.open(method, 'https://api.spotify.com/v1' + endpoint, true);
     xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-    if (body) xhr.setRequestHeader('Content-Type', 'application/json')
-        
+    if (body) xhr.setRequestHeader('Content-Type', 'application/json');
+
     xhr.onload = function () {
         if (xhr.status >= 200 && xhr.status < 300) {
             callback(JSON.parse(xhr.responseText));
         } else {
             showWarning('Error Spotify: ' + xhr.status);
             if (xhr.status === 401) {
-                // Token expirado → volver a login
                 setTimeout(login, 2000);
             }
         }
@@ -62,6 +63,56 @@ function apiCall(endpoint, method = 'GET', body, callback) {
     xhr.onerror = () => showWarning('Error de red');
     xhr.send(body ? JSON.stringify(body) : null);
 }
+
+async function exchangeCodeForToken(code) {
+    const codeVerifier = localStorage.getItem('code_verifier');
+
+    if (!codeVerifier) {
+        showWarning('Error: Could not find code_verifier. Try to log in again.');
+        return;
+    }
+
+    const payload = new URLSearchParams({
+        grant_type: 'authorization_code',
+        code: code,
+        redirect_uri: REDIRECT_URI,
+        client_id: CLIENT_ID,
+        code_verifier: codeVerifier
+    });
+
+    try {
+        const response = await fetch('https://accounts.spotify.com/api/token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: payload
+        });
+
+        if (!response.ok) {
+            const err = await response.json();
+            showWarning('Error token: ' + (err.error_description || response.status));
+            return;
+        }
+
+        const data = await response.json();
+        accessToken = data.access_token;
+
+        history.replaceState({}, document.title, REDIRECT_URI);
+        localStorage.removeItem('code_verifier');
+
+        document.getElementById('loginBtn').style.display = 'none';
+        document.getElementById('main').style.display = 'block';
+
+        getActiveDevice();
+        fetchProfile().then(populateUI);
+        loadPopularPlaylists();
+        loadTopGenres();
+        setTimeout(initOrRefreshKeyboardNavigation, 1000);
+
+    } catch (err) {
+        showWarning('Error de red al obtener token');
+    }
+}
+
 function loadPopularPlaylists() {
             apiCall('/me/top/tracks?limit=20&time_range=medium_term', 'GET', null, function(topData) {
                 if (!topData?.items?.length) {
@@ -149,7 +200,7 @@ function loadTopGenres() {
             });
         });
 
-        const idsArray = Array.from(artistIds).slice(0, 50); // Máximo por llamada
+        const idsArray = Array.from(artistIds).slice(0, 50);
         if (idsArray.length === 0) return;
 
         apiCall('/artists?ids=' + idsArray.join(','), 'GET', null, function(artistsData) {
@@ -163,14 +214,12 @@ function loadTopGenres() {
                 }
             });
 
-            // Ordenar por popularidad y tomar top 12
             const sortedGenres = Object.keys(genreCount)
                 .sort((a, b) => genreCount[b] - genreCount[a])
                 .slice(0, 12);
 
             const container = document.getElementById('topGenres');
 
-            // Géneros predefinidos con imágenes fallback (por si Spotify no da buena)
             const genreImages = {
                 'rock': 'https://i.scdn.co/image/ab67706f000000029bb74f4ac1069a5e7f5e5d1f',
                 'pop': 'https://i.scdn.co/image/ab67706f00000002e435ce3e9e2f034e8e9e4f0e',
@@ -191,7 +240,6 @@ function loadTopGenres() {
                 div.className = 'genre-card navigable';
                 div.tabIndex = 0;
 
-                // Buscar imagen específica del género en Spotify
                 apiCall('/search?q=' + encodeURIComponent(genre + ' mood') + '&type=playlist&limit=3', 'GET', null, function(searchData) {
                     let bgUrl = 'https://via.placeholder.com/300x300/111/333?text=' + encodeURIComponent(genre.toUpperCase());
 
@@ -202,7 +250,6 @@ function loadTopGenres() {
                         }
                     }
 
-                    // Fallback a imágenes oficiales de Spotify si coincide
                     const lowerGenre = genre.toLowerCase();
                     for (const key in genreImages) {
                         if (lowerGenre.includes(key)) {
@@ -438,25 +485,16 @@ function getTokenFromUrl() {
             const hash = window.location.hash.substring(1);
             const params = new URLSearchParams(hash);
             return params.get('access_token');
-        }
+}
 
-        window.onload = function () {
-            accessToken = getTokenFromUrl();
+window.onload = function () {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
 
-            if (accessToken) {
-                // Limpiamos el hash de la URL para que quede bonita
-                history.replaceState({}, document.title, window.location.pathname);
-
-                document.getElementById('loginBtn').style.display = 'none';
-                document.getElementById('main').style.display = 'block';
-
-                getActiveDevice();
-                fetchProfile().then(populateUI);
-                loadPopularPlaylists();
-                loadTopGenres();
-                setTimeout(initOrRefreshKeyboardNavigation, 1000);
-            }
-        };
+    if (code) {
+        exchangeCodeForToken(code);
+    }
+};
 function gotosection(section){
     document.getElementById("main").style.left = "-200vw";
 }
