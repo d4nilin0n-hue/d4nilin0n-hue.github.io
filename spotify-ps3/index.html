@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Spotify Remote para PS3</title>
+        <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg"></div>
+    <header>
+        <img src="./src/logo.png" alt="logo">
+        <nav class="nav-links">
+            <button class="sel navigable" tabindex="0">Browse</button>
+            <button class="navigable" onclick="gotosection()" tabindex="0">Your music</button>
+        </nav>
+        <div class="right-section">
+            <img src="./src/search.svg" alt="search-svg" class="navigable search-icon" tabindex="0">
+            <div class="division"></div>
+            <img src="" class="pfp navigable" alt="pfp" tabindex="0">
+        </div>
+    </header>
+    <div id="main" style="display:none;">
+        <p class="title">WHAT DO YOU WANT TO HEAR TODAY?</p>
+        <div class="search-section" style="display: none;">
+            <input type="text" id="searchInput" placeholder="Search" />
+            <button id="searchBtn">Search</button>
+            <p class="playing">Active devices: <span id="deviceName">loading...</span></p>
+        </div>
+        <div class="container--">
+            <div id="popularPlaylists" class="highlighted --section"></div>
+            <div class="division"></div>
+            <div id="topGenres" class="--section"></div>
+        </div>
+        <ul id="results"></ul>
+    </div>
+    <button id="loginBtn">Connect with Spotify</button>
+    <div id="ps3Warning" class="warning-modal" style="display: none;">
+        <div class="warning-content">
+            <p class="warning-text"></p>
+            <hr class="warning-line" style="width: 80vw;">
+            <button class="ok-btn" onclick="closeWarning()">
+            <span class="x-icon">✖</span> OK
+            </button>
+        </div>
+    </div>
+    <script src="./src/js/script.js" async defer></script>
+</body>
+</html>
