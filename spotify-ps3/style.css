@@ -289,3 +289,55 @@ nav button.keyboard-focus,
     text-shadow: 0 2px 8px black;
     z-index: 2;
 }
+
+#myFavouriteSongsSection {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px 20px;
+}
+
+.liked-song-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    transition: background 0.3s;
+}
+
+.liked-song-item.keyboard-focus {
+    background: rgba(30, 215, 96, 0.3) !important;
+    outline: 2px solid #1DB954;
+}
+
+.liked-song-cover {
+    width: 64px;
+    height: 64px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.liked-song-info {
+    flex: 1;
+    overflow: hidden;
+}
+
+.liked-song-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.liked-song-artist {
+    font-size: 14px;
+    color: #b3b3b3;
+    margin: 4px 0 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
