@@ -1,3 +1,4 @@
+/*NEW RESPONSIVE DESIGN*/
 body{
     overflow: hidden;
     font-family: sans-serif;
@@ -21,11 +22,15 @@ input{
     width: 400px; padding: 12px; font-size: 18px; 
 }
 #loginBtn{ 
-    padding: 12px 24px; font-size: 18px; margin: 10px 0; background: #1DB954; color: white; border: none; border-radius: 4px; 
+    padding: 12px 24px; font-size: 18px; margin: 10px 0; 
+    background: #1db95400; 
+    color: white; 
+    border: 3px solid white; 
+    border-radius: 50px; 
     position: absolute;
-    top: 50%;
+    bottom: 10vh;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
 }
 ul{ 
     list-style: none; padding: 0; 
@@ -43,13 +48,17 @@ header{
     display: flex;
 }
 header img[alt="logo"]{
-    height: 60px;
-    margin-top: 60px;
+    height: 10vh;
+    margin-top: 6vh;
     margin-left: 60px;
 }
 header img.pfp{
-    height: 50px;
+    height: 7vh;
+    width: 7vh;
     border-radius: 50px;
+    background: white;
+    border-radius: 50%;
+    color: rgba(0,0,0,0);
 }
 header .right-section{
     display: -webkit-box; /* Sintaxis antigua para WebKit (PS3, Android 2.x, Safari 3.1-6) */
@@ -62,28 +71,28 @@ header .right-section{
     flex-direction: row;
     position: absolute;
     right: 60px;
-    top: 60px;
+    top: 6vh;
 }
 header .division{
     width: 2px;
-    height: 50px;
-    background-color: #495c5a;
+    height: 7vh;
+    background-color: #ffffff81;
     margin-right: 20px;
 }
 header .right-section img[alt="search-svg"]{
-    height: 50px;
+    height: 6vh;
     margin-right: 20px;
     cursor: pointer;
 }
 header nav{
-    margin-top: 80px;
+    margin-top: 8vh;
     margin-left: 40px;
 }
 header nav button{
     background: none;
     border: none;
     color: #495c5a;
-    font-size: 16px;
+    font-size: 2rem;
     margin-right: 30px;
     padding-bottom: 10px;
     cursor: pointer;
@@ -348,4 +357,22 @@ nav button.keyboard-focus,
     left: 200vw;
     color: white;
     transition: left 0.5s ease;
+}
+#login{
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: url(./src/img/welcome-bg.jpg) no-repeat center center fixed;
+    background-size: cover;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#login .logo{
+    width: 25vw;
+    position: absolute;
+    top: 5vh;
+    margin-bottom: 40px;
 }
