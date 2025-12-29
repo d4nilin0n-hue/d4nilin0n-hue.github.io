@@ -41,6 +41,7 @@ input {
     left: 50%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
+    bottom: 25%;
 }
 
 /* HEADER */
@@ -325,11 +326,11 @@ header nav button.sel {
 }
 
 #login .logo {
-    width: 300px;
+    width: 550px;
     position: absolute;
     top: 50px;
     left: 50%;
-    margin-left: -150px;
+    margin-left: -275px;
 }
 #login .bg {
     width: 100%;
