@@ -1,5 +1,5 @@
 const CLIENT_ID = 'dcdf1b28e75a4bb1b46ba48533bddf78';
-const REDIRECT_URI = 'https://d4nilin0n-hue.github.io/spotify-ps3/index.html'; // ¡Exacto así!
+const REDIRECT_URI = 'https://d4nilin0n-hue.github.io/spotify-ps3/index.html';
 
 const SCOPES = 'user-read-playback-state user-modify-playback-state user-read-currently-playing user-library-read user-library-modify user-read-private user-top-read playlist-modify-public playlist-modify-private';
 
@@ -108,6 +108,7 @@ async function exchangeCodeForToken(code) {
         fetchProfile().then(populateUI);
         loadPopularPlaylists();
         loadTopGenres();
+        loadLikedSongs();
         setTimeout(initOrRefreshKeyboardNavigation, 1000);
 
     } catch (err) {
@@ -280,6 +281,63 @@ function loadTopGenres() {
 
             initOrRefreshKeyboardNavigation();
         });
+    });
+}
+function loadLikedSongs() {
+    apiCall('/me/tracks?limit=50', 'GET', null, function(data) {
+        const container = document.getElementById('myFavouriteSongsSection');
+        container.innerHTML = ''; // Limpiar
+
+        if (!data || !data.items || data.items.length === 0) {
+            container.innerHTML = '<p style="color: #aaa; text-align: center; padding: 40px;">No tienes canciones guardadas en ❤️ aún.</p>';
+            return;
+        }
+
+        data.items.forEach(item => {
+            const track = item.track;
+
+            const div = document.createElement('div');
+            div.className = 'liked-song-item navigable';
+            div.tabIndex = 0;
+
+            // Portada del álbum
+            const img = document.createElement('img');
+            img.src = track.album.images[track.album.images.length - 1]?.url || 'https://via.placeholder.com/64/222/fff?text=♪';
+            img.alt = track.name;
+            img.className = 'liked-song-cover';
+
+            // Info
+            const infoDiv = document.createElement('div');
+            infoDiv.className = 'liked-song-info';
+
+            const title = document.createElement('p');
+            title.className = 'liked-song-title';
+            title.textContent = track.name.length > 40 ? track.name.substring(0, 40) + '...' : track.name;
+
+            const artist = document.createElement('p');
+            artist.className = 'liked-song-artist';
+            artist.textContent = track.artists.map(a => a.name).join(', ');
+
+            infoDiv.appendChild(title);
+            infoDiv.appendChild(artist);
+
+            // Reproducir con Enter o click
+            div.onclick = div.onkeydown = function(e) {
+                if (e && (e.key === 'Enter' || e.key === ' ')) e.preventDefault();
+                if (!deviceId) {
+                    showWarning('Abre Spotify en un dispositivo primero');
+                    return;
+                }
+                apiCall('/me/player/play?device_id=' + deviceId, 'PUT', { uris: [track.uri] }, () => {});
+            };
+
+            div.appendChild(img);
+            div.appendChild(infoDiv);
+            container.appendChild(div);
+        });
+
+        // Refresca navegación por teclado
+        setTimeout(initOrRefreshKeyboardNavigation, 500);
     });
 }
 // ====== DEVICE AND PROFILE ======
@@ -498,5 +556,14 @@ window.onload = function () {
     }
 };
 function gotosection(section){
-    document.getElementById("main").style.left = "-200vw";
+    switch(section){
+        case 'yourmusic':
+            document.getElementById("main").style.left = "-200vw";
+            document.getElementById('yourmusic').style.left = "60px";
+            break;
+        case 'browse':
+            document.getElementById('yourmusic').style.left = "-200vw";
+            document.getElementById('main').style.left = "60px";
+            break;
+    }
 }
