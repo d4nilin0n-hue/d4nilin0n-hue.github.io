@@ -40,9 +40,7 @@ async function login() {
 
     window.location = `https://accounts.spotify.com/authorize?${params.toString()}`;
 }
-
-// Asigna el click al botón (ajústalo si tu botón tiene otro ID)
-document.getElementById('loginBtn').onclick = login;
+document.getElementById('loginBtn').addEventListener('click', login);
 
 
 function apiCall(endpoint, method = 'GET', body, callback) {
@@ -61,14 +59,14 @@ function apiCall(endpoint, method = 'GET', body, callback) {
             }
         }
     };
-    xhr.onerror = () => showWarning('Error de red');
+    xhr.onerror = () => showWarning('Network error during Spotify API call');
     xhr.send(body ? JSON.stringify(body) : null);
 }
 async function exchangeCodeForToken(code) {
     const codeVerifier = localStorage.getItem('code_verifier');
 
     if (!codeVerifier) {
-        showWarning('Error: No se encontró code_verifier. Intenta login de nuevo.');
+        showWarning('Error: code_verifier not found. Please try logging in again.');
         return;
     }
 
@@ -89,7 +87,7 @@ async function exchangeCodeForToken(code) {
 
         if (!response.ok) {
             const err = await response.json();
-            showWarning('Error token: ' + (err.error_description || response.status));
+            showWarning('Token error: ' + (err.error_description || response.status));
             return;
         }
 
@@ -112,14 +110,14 @@ async function exchangeCodeForToken(code) {
         setTimeout(initOrRefreshKeyboardNavigation, 1000);
 
     } catch (err) {
-        showWarning('Error de red al obtener token');
+        showWarning('Network error obtaining token');
     }
 }
 
 function loadPopularPlaylists() {
             apiCall('/me/top/tracks?limit=20&time_range=medium_term', 'GET', null, function(topData) {
                 if (!topData?.items?.length) {
-                    document.getElementById('popularPlaylists').innerHTML = '<p>No hay datos.</p>';
+                    document.getElementById('popularPlaylists').innerHTML = '<p>No data.</p>';
                     return;
                 }
                 const artistIds = [];
@@ -171,7 +169,7 @@ function loadPopularPlaylists() {
 
                             div.onclick = div.onkeydown = function(e) {
                                 if (e && (e.key === 'Enter' || e.key === ' ')) e.preventDefault();
-                                if (!deviceId) return showWarning('Abre Spotify en un dispositivo primero');
+                                if (!deviceId) return showWarning('Open Spotify on a device first');
                                 apiCall('/me/player/play?device_id=' + deviceId, 'PUT', { context_uri: playlist.uri }, () => {});
                             };
 
@@ -325,7 +323,7 @@ function loadLikedSongs() {
             div.onclick = div.onkeydown = function(e) {
                 if (e && (e.key === 'Enter' || e.key === ' ')) e.preventDefault();
                 if (!deviceId) {
-                    showWarning('Abre Spotify en un dispositivo primero');
+                    showWarning('Open Spotify on a device first');
                     return;
                 }
                 apiCall('/me/player/play?device_id=' + deviceId, 'PUT', { uris: [track.uri] }, () => {});
@@ -348,7 +346,7 @@ function getActiveDevice() {
             deviceId = active.id;
             document.getElementById('deviceName').textContent = active.name + ' (' + active.type + ')';
         } else {
-            document.getElementById('deviceName').textContent = 'Ninguno activo';
+            document.getElementById('deviceName').textContent = 'No active device';
         } // Detects and displays the currently active playback device
     });
 }
@@ -388,7 +386,7 @@ document.getElementById('searchBtn').onclick = function() {
 };
 window.playTrack = function(trackUri) {
     if (!deviceId) {
-        showWarning('Abre Spotify en tu dispositivo primero');
+        showWarning('Open Spotify on a device first');
         return;
     }
     apiCall('/me/player/play?device_id=' + deviceId, 'PUT', { uris: [trackUri] }, function() {}); // Plays a single track on the active device
