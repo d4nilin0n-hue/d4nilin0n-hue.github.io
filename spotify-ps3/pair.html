@@ -103,9 +103,7 @@
         if (code) {
             const codeVerifier = localStorage.getItem('code_verifier');
             if (!codeVerifier) {
-                // Seguridad: si no hay verifier, reinicia
                 startLogin();
-                return;
             }
 
             const payload = new URLSearchParams({
