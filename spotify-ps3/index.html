@@ -723,7 +723,7 @@ function verifyToken(){
                 accessToken = token;
                 localStorage.setItem('spotify_token', token);
                 // Carga la app
-                document.getElementById('login').style.display = 'none';
+                document.getElementById('login-step-three').style.display = 'none';
                 document.getElementById('main').style.display = 'block';
                 
                 getActiveDevice();
