@@ -4,7 +4,7 @@ body {
     font-family: sans-serif;
     margin: 0;
     padding: 0;
-    background: #172822; /* Color base sólido, el gradiente lo ponemos en .bg */
+    background: #172822; 
     color: #fff;
 }
 
@@ -15,9 +15,8 @@ body {
     width: 100%;
     height: 100%;
     background: #172822;
-    /* Gradiente compatible con WebKit viejo (PS3) */
     background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#172822), color-stop(50%,#37615f), color-stop(80%,#192519), color-stop(100%,#151b0d));
-    background: #172822; /* fallback */
+    background: #172822;
     z-index: -1;
 }
 
@@ -144,15 +143,19 @@ header nav button.sel {
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,0.85);
-    z-index: 9999;
+    z-index: 99999999999;
     text-align: center;
-    padding-top: 200px;
+    padding-top: 300px;
 }
 
 .warning-text {
     font-size: 20px;
     color: #ccc;
     margin-bottom: 40px;
+}
+
+.warning-content{
+    width: 100%;
 }
 
 .warning-line {
@@ -172,7 +175,8 @@ header nav button.sel {
 /* POPULAR PLAYLISTS - Usamos floats en vez de grid */
 #popularPlaylists {
     overflow: hidden;
-    width: 100%;
+    width: 90%;
+    float: left;
 }
 
 .playlist-item {
@@ -194,8 +198,7 @@ header nav button.sel {
 .data-playlist-container {
     position: absolute;
     left: 220px;
-    top: 0;
-    height: 200px;
+    bottom: 0;
     display: table;
 }
 
@@ -231,7 +234,8 @@ header nav button.sel {
 /* TOP GENRES - Floats en vez de grid */
 #topGenres {
     overflow: hidden;
-    width: 100%;
+    width: 90%;
+    float: right;
 }
 
 .genre-card {
@@ -451,4 +455,11 @@ header nav button.sel {
 #login-step-three button:active {
     background: rgba(255, 255, 255, 0.4);
     color: rgb(0, 0, 0);
+}
+#main-screen-sections-container{
+    display: table;
+    width: 100%;
+    height: 40%;
+    overflow-y: hidden;
+    position: absolute;
 }
