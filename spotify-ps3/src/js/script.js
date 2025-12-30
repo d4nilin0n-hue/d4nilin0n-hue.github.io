@@ -568,6 +568,13 @@ window.onload = function() {
         loadLikedSongs();
         setTimeout(initOrRefreshKeyboardNavigation, 1000);
     }
+
+    const loginBtn = document.getElementById('loginBtn');
+    if (loginBtn) {
+        loginBtn.addEventListener('click', function() {
+            gotosection('pairqr');
+        });
+    }
 };
 function gotosection(section){
     switch(section){
