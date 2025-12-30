@@ -55,23 +55,106 @@
     <div id="tokenDisplay"></div>
 
     <script>
-    document.getElementById('nextBtn').onclick = function() {
-    const enteredCode = document.getElementById('codeInput').value.trim();
+    const CLIENT_ID = 'dcdf1b28e75a4bb1b46ba48533bddf78';
+        const REDIRECT_URI = 'https://d4nilin0n-hue.github.io/spotify-ps3/auth.html';
 
-    if (enteredCode.length !== 6 || isNaN(enteredCode)) {
-        alert('Type in a valid 6-digit code.');
-        return;
-    }
+        const SCOPES = 'user-read-playback-state user-modify-playback-state user-read-currently-playing user-library-read user-library-modify user-read-private user-top-read playlist-modify-public playlist-modify-private';
 
-    // Verifica que coincida con el código generado en PS3
-    const expectedCode = localStorage.getItem('pair_code'); // Compartido si usas la misma cuenta
-    if (enteredCode === expectedCode) {
-        // Código correcto → inicia login oficial
-        startOAuthFlow();
-    } else {
-        alert('Incorrect code. Check the number on your device.');
-    }
-};
+        // PKCE helpers
+        function generateRandomString(length) {
+            let text = '';
+            const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+            for (let i = 0; i < length; i++) {
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+            }
+            return text;
+        }
+
+        async function sha256(plain) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(plain);
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            return btoa(String.fromCharCode(...new Uint8Array(hash)))
+                .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+        }
+
+        // === AUTOMÁTICO: Siempre redirige al login oficial si no hay sesión activa ===
+        function startLogin() {
+            const codeVerifier = generateRandomString(128);
+            localStorage.setItem('code_verifier', codeVerifier);
+
+            sha256(codeVerifier).then(codeChallenge => {
+                const params = new URLSearchParams({
+                    client_id: CLIENT_ID,
+                    response_type: 'code',
+                    redirect_uri: REDIRECT_URI,
+                    code_challenge_method: 'S256',
+                    code_challenge: codeChallenge,
+                    scope: SCOPES
+                });
+                window.location = `https://accounts.spotify.com/authorize?${params.toString()}`;
+            });
+        }
+
+        // === Si vuelve con ?code= , intercambia por token ===
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get('code');
+
+        if (code) {
+            const codeVerifier = localStorage.getItem('code_verifier');
+            if (!codeVerifier) {
+                // Seguridad: si no hay verifier, reinicia
+                startLogin();
+                return;
+            }
+
+            const payload = new URLSearchParams({
+                grant_type: 'authorization_code',
+                code: code,
+                redirect_uri: REDIRECT_URI,
+                client_id: CLIENT_ID,
+                code_verifier: codeVerifier
+            });
+
+            fetch('https://accounts.spotify.com/api/token', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: payload
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.access_token) {
+                    const token = data.access_token;
+                    localStorage.setItem('spotify_token', token);
+
+                    // Obtener nombre de usuario
+                    fetch('https://api.spotify.com/v1/me', {
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    })
+                    .then(res => res.json())
+                    .then(user => {
+                        document.getElementById('loading').style.display = 'none';
+                        document.getElementById('success').style.display = 'block';
+
+                        document.getElementById('userInfo').innerHTML = `<p>Conectado como: <strong>${user.display_name || user.id}</strong></p>`;
+
+                        document.getElementById('tokenDisplay').innerHTML = `
+                            <code style="background:#222;padding:20px;display:block;margin:20px 0;font-size:14px;">${token}</code>
+                        `;
+
+                        history.replaceState({}, '', REDIRECT_URI);
+                    });
+                } else {
+                    document.getElementById('loading').innerHTML = '<p>Error al obtener token. Intenta de nuevo.</p>';
+                }
+            })
+            .catch(() => {
+                document.getElementById('loading').innerHTML = '<p>Error de red. Revisa tu conexión.</p>';
+            });
+        } else {
+            // === SI NO HAY ?code= → REDIRIGIR AUTOMÁTICO AL LOGIN OFICIAL ===
+            startLogin();
+        }
 </script>
 </body>
 </html>
