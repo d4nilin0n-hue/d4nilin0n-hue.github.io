@@ -55,42 +55,91 @@
     <div id="tokenDisplay"></div>
 
     <script>
-        const CLIENT_ID = 'dcdf1b28e75a4bb1b46ba48533bddf78';
-        const REDIRECT_URI = 'https://d4nilin0n-hue.github.io/spotify-ps3/pair.html';
+    const CLIENT_ID = 'dcdf1b28e75a4bb1b46ba48533bddf78';
+    const REDIRECT_URI = 'https://d4nilin0n-hue.github.io/spotify-ps3/auth.html';
 
-        const SCOPES = 'user-read-playback-state user-modify-playback-state user-read-currently-playing user-library-read user-library-modify user-read-private user-top-read playlist-modify-public playlist-modify-private';
+    const SCOPES = 'user-read-playback-state user-modify-playback-state user-read-currently-playing user-library-read user-library-modify user-read-private user-top-read playlist-modify-public playlist-modify-private';
 
-        let accessToken = null;
+    let accessToken = null;
 
-        // Al cargar, revisa si hay token en localStorage (para mantener sesión)
-        window.onload = function() {
-            accessToken = localStorage.getItem('spotify_token');
-            if (accessToken) {
-                validateAndShowUser(accessToken);
+    // Al cargar: si hay token guardado, intenta validarlo
+    window.onload = function() {
+        accessToken = localStorage.getItem('spotify_token');
+        if (accessToken) {
+            validateToken(accessToken);
+        } else {
+            // Si no hay token, muestra pantalla normal de pairing
+            showPairingScreen();
+        }
+    };
+
+    document.getElementById('nextBtn').onclick = function() {
+        const code = document.getElementById('codeInput').value.trim();
+
+        if (!code) {
+            // Sin código → inicia login normal de Spotify
+            startOAuthFlow();
+            return;
+        }
+
+        // Con código pegado → validar como token
+        accessToken = code;
+        localStorage.setItem('spotify_token', accessToken);
+        validateToken(accessToken);
+    };
+
+    function showPairingScreen() {
+        document.getElementById('userInfo').style.display = 'none';
+        document.getElementById('tokenDisplay').style.display = 'none';
+        document.getElementById('codeInput').value = '';
+        document.querySelector('p').textContent = 'Ingresa el código que aparece en el dispositivo.';
+    }
+
+    function validateToken(token) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://api.spotify.com/v1/me', true);
+        xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                const user = JSON.parse(xhr.responseText);
+                document.getElementById('username').textContent = user.display_name || user.id;
+                document.getElementById('userInfo').style.display = 'block';
+
+                document.getElementById('tokenDisplay').style.display = 'block';
+                document.getElementById('tokenDisplay').innerHTML = `
+                    <p><strong>¡Conectado! Token listo para PS3:</strong></p>
+                    <code style="background:#222;padding:20px;display:block;margin:20px 0;font-size:14px;">${token}</code>
+                    <p>Pégalo en la PS3. Válido por ~1 hora.</p>
+                `;
+
+                // Cambia el texto para que se vea autenticado
+                document.querySelector('h1').textContent = 'Cuenta emparejada';
+                document.querySelector('p').textContent = 'Tu cuenta está conectada correctamente.';
+                document.getElementById('codeInput').style.display = 'none';
+                document.getElementById('nextBtn').textContent = 'Actualizar token';
+
+            } else {
+                // Token inválido o expirado
+                localStorage.removeItem('spotify_token');
+                showPairingScreen();
+                document.getElementById('tokenDisplay').style.display = 'block';
+                document.getElementById('tokenDisplay').innerHTML = '<p style="color:#ff4444;">Token inválido o expirado. Pega uno nuevo o inicia sesión de nuevo.</p>';
             }
         };
 
-        document.getElementById('nextBtn').onclick = async function() {
-            const code = document.getElementById('codeInput').value.trim();
-
-            if (!code) {
-                // Si no hay código, inicia el flujo normal de login (va a Spotify)
-                startOAuthFlow();
-                return;
-            }
-
-            // Si hay código pegado, asumir que es un access_token válido
-            accessToken = code;
-            localStorage.setItem('spotify_token', accessToken);
-
-            validateAndShowUser(accessToken);
+        xhr.onerror = function() {
+            showPairingScreen();
+            document.getElementById('tokenDisplay').innerHTML = '<p style="color:#ff4444;">Error de red. Revisa tu conexión.</p>';
         };
 
-        async function startOAuthFlow() {
-            const codeVerifier = generateRandomString(128);
-            localStorage.setItem('code_verifier', codeVerifier);
-            const codeChallenge = await sha256(codeVerifier);
+        xhr.send();
+    }
 
+    function startOAuthFlow() {
+        const codeVerifier = generateRandomString(128);
+        localStorage.setItem('code_verifier', codeVerifier);
+        sha256(codeVerifier).then(codeChallenge => {
             const params = new URLSearchParams({
                 client_id: CLIENT_ID,
                 response_type: 'code',
@@ -99,62 +148,34 @@
                 code_challenge: codeChallenge,
                 scope: SCOPES
             });
-
             window.location = `https://accounts.spotify.com/authorize?${params.toString()}`;
+        });
+    }
+
+    // Helpers PKCE
+    function generateRandomString(length) {
+        let text = '';
+        const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+        for (let i = 0; i < length; i++) {
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
         }
+        return text;
+    }
 
-        async function validateAndShowUser(token) {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'https://api.spotify.com/v1/me', true);
-            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+    async function sha256(plain) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(plain);
+        const hash = await crypto.subtle.digest('SHA-256', data);
+        return btoa(String.fromCharCode(...new Uint8Array(hash)))
+            .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
 
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    const user = JSON.parse(xhr.responseText);
-                    document.getElementById('username').textContent = user.display_name || user.id;
-                    document.getElementById('userInfo').style.display = 'block';
-
-                    document.getElementById('tokenDisplay').style.display = 'block';
-                    document.getElementById('tokenDisplay').innerHTML = `
-                        <p><strong>Token copiado, listo para PS3:</strong></p>
-                        <code style="background:#222;padding:15px;display:block;margin:10px 0;">${token}</code>
-                        <p>Válido por ~1 hora. Pégalo en la PS3.</p>
-                    `;
-                    document.getElementById('codeInput').value = ''; // Limpia input
-                } else {
-                    alert('Token inválido o expirado. Intenta de nuevo.');
-                    localStorage.removeItem('spotify_token');
-                    document.getElementById('userInfo').style.display = 'none';
-                    document.getElementById('tokenDisplay').style.display = 'none';
-                }
-            };
-            xhr.onerror = () => alert('Error de red');
-            xhr.send();
-        }
-
-        // PKCE helpers (iguales que antes)
-        function generateRandomString(length) {
-            let text = '';
-            const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
-            for (let i = 0; i < length; i++) {
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
-            }
-            return text;
-        }
-
-        async function sha256(plain) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(plain);
-            const hash = await crypto.subtle.digest('SHA-256', data);
-            return btoa(String.fromCharCode(...new Uint8Array(hash)))
-                .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-        }
-
-        // Si viene ?code= desde Spotify, intercambia por token
-        const params = new URLSearchParams(window.location.search);
-        const code = params.get('code');
-        if (code) {
-            const codeVerifier = localStorage.getItem('code_verifier');
+    // Intercambio automático si viene ?code=
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    if (code) {
+        const codeVerifier = localStorage.getItem('code_verifier');
+        if (codeVerifier) {
             const payload = new URLSearchParams({
                 grant_type: 'authorization_code',
                 code: code,
@@ -174,10 +195,14 @@
                     accessToken = data.access_token;
                     localStorage.setItem('spotify_token', accessToken);
                     history.replaceState({}, '', REDIRECT_URI);
-                    validateAndShowUser(accessToken);
+                    validateToken(accessToken);
                 }
+            })
+            .catch(() => {
+                showPairingScreen();
             });
         }
-    </script>
+    }
+</script>
 </body>
 </html>
