@@ -84,7 +84,7 @@
             <button onclick="document.getElementById('login-step-three').style.display = 'none'; document.getElementById('login-step-two').style.display = 'block';">
                 Back
             </button>
-            <button id="submitCodeBtn" onclick="verifyToken()">
+            <button id="submitCodeBtn" onclick="verifyToken(); document.getElementById('login-step-three').style.display = 'none'; document.getElementById('main').style.display = 'block';">
                 Check Token
             </button>
     </div>
