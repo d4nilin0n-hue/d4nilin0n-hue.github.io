@@ -421,7 +421,6 @@ function closeWarning() {
     }, 10); // Hides the warning modal with fade-out animation
 }
 
-document.body.style.cursor = 'none';
 
 let currentFocus = null;
 
@@ -579,6 +578,10 @@ function gotosection(section){
         case 'browse':
             document.getElementById('yourmusic').style.left = "300vw";
             document.getElementById('main').style.left = "60px";
+            break;
+        case 'pairqr':
+            document.getElementById("login").style.display = "none";
+            document.getElementById("login-step-two").style.display = "block";
             break;
     }
 }
