@@ -4,7 +4,7 @@ body {
     font-family: sans-serif;
     margin: 0;
     padding: 0;
-    background: #172822;
+    background: #172822; /* Color base sólido, el gradiente lo ponemos en .bg */
     color: #fff;
 }
 
@@ -15,6 +15,7 @@ body {
     width: 100%;
     height: 100%;
     background: #172822;
+    /* Gradiente compatible con WebKit viejo (PS3) */
     background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#172822), color-stop(50%,#37615f), color-stop(80%,#192519), color-stop(100%,#151b0d));
     background: #172822; /* fallback */
     z-index: -1;
@@ -26,6 +27,7 @@ input {
     font-size: 18px;
 }
 
+/* BOTÓN LOGIN */
 #loginBtn {
     padding: 14px 26px;
     font-size: 22px;
@@ -340,6 +342,12 @@ header nav button.sel {
     height: 100%;
     z-index: -1;
     pointer-events: none;
+}
+#login img[alt="psmusic"] {
+    width: 100px;
+    position: absolute;
+    bottom: 220px;
+    right: 50px;
 }
 
 /* LIMPIAR FLOATS */
