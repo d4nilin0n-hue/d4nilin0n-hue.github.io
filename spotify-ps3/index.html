@@ -49,15 +49,25 @@
         <br><br>
         <img src="./src/img/qrcode.png" alt="">
         <div class="button-container">
-            <button onclick="gotosection('login')" >
+            <button onclick="document.getElementById('login').style.display = 'block'; document.getElementById('login-step-two').style.display = 'none';">
                 Back
             </button>
-            <button>
+            <button onclick="document.getElementById('login-step-three').style.display = 'block'; document.getElementById('login-step-two').style.display = 'none';">
                 Done
             </button>
         </div>
     </div>
-    <div id="login-step-three"></div>
+    <div id="login-step-three" style="display: none;">
+        <h1>Enter the token shown on your device</h1>
+        <input type="text" id="codeInput">
+        <div class="button-container">
+            <button onclick="document.getElementById('login-step-three').style.display = 'none'; document.getElementById('login-step-two').style.display = 'block';">
+                Back
+            </button>
+            <button id="submitCodeBtn">
+                Submit
+            </button>
+    </div>
     <div id="ps3Warning" class="warning-modal" style="display: none;">
         <div class="warning-content">
             <p class="warning-text"></p>
