@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0, user-scalable=no">
-    <title>Pair</title>
+    <title>Auth Spotify para PS3</title>
     <style>
         body { 
             background: #121212; color: #fff; font-family: sans-serif;padding: 50px;
@@ -131,10 +131,8 @@
                     })
                     .then(res => res.json())
                     .then(user => {
-                        document.getElementById('loading').style.display = 'none';
-                        document.getElementById('success').style.display = 'block';
-
-                        document.getElementById('userInfo').innerHTML = `<p>Conectado como: <strong>${user.display_name || user.id}</strong></p>`;
+                        document.getElementById('userinfo').style.display = 'block';
+                        document.getElementById('userInfo').innerHTML = `<strong>${user.display_name || user.id}</strong>`;
 
                         document.getElementById('tokenDisplay').innerHTML = `
                             <code style="background:#222;padding:20px;display:block;margin:20px 0;font-size:14px;">${token}</code>
@@ -143,14 +141,13 @@
                         history.replaceState({}, '', REDIRECT_URI);
                     });
                 } else {
-                    document.getElementById('loading').innerHTML = '<p>Error al obtener token. Intenta de nuevo.</p>';
+                    document.getElementById('loading').innerHTML = '<p>Error obtaining token. Try again.</p>';
                 }
             })
             .catch(() => {
-                document.getElementById('loading').innerHTML = '<p>Error de red. Revisa tu conexión.</p>';
+                document.getElementById('loading').innerHTML = '<p>Network error. Check your connection.</p>';
             });
         } else {
-            // === SI NO HAY ?code= → REDIRIGIR AUTOMÁTICO AL LOGIN OFICIAL ===
             startLogin();
         }
 </script>
