@@ -478,3 +478,13 @@ header nav button.sel {
     overflow-y: hidden;
     position: absolute;
 }
+#status{
+    position: fixed;   
+    bottom: 10px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    font-size: 14px;
+    color: #888888;
+    
+}
