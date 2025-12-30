@@ -379,7 +379,7 @@ document.getElementById('searchBtn').onclick = function() {
             li.tabIndex = 0;
             var artists = track.artists.map(a => a.name).join(', ');
             li.innerHTML = '<strong>' + track.name + '</strong><br>' + artists +
-                '<button onclick="playTrack(\'spotify:track:' + track.id + '\')">▶ Reproducir</button>';
+                '<button onclick="playTrack(\'spotify:track:' + track.id + '\')">▶ Play</button>';
             li.onclick = li.onkeydown = function(e) {
                 if (e && (e.key === 'Enter' || e.key === ' ')) {
                     playTrack('spotify:track:' + track.id);
@@ -578,7 +578,7 @@ function verifyToken(){
     const token = document.getElementById('codeInput').value.trim();
 
     if (!token) {
-        showWarning('Pega un token válido');
+        showWarning('Paste a valid token');
         return;
     }
 
@@ -603,14 +603,14 @@ function verifyToken(){
             loadLikedSongs();
             setTimeout(initOrRefreshKeyboardNavigation, 1000);
 
-            showWarning('¡Conectado como ' + (user.display_name || user.id) + '!');
+            showWarning('Connected as ' + (user.display_name || user.id) + '!');
         } else {
-            showWarning('Token inválido o expirado. Intenta de nuevo.');
+            showWarning('Invalid or expired token. Please try again.');
         }
     };
 
     xhr.onerror = function() {
-        showWarning('Error de red. Revisa tu conexión.');
+        showWarning('Network error during token verification');
     };
 
     xhr.send();
