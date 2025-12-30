@@ -574,15 +574,52 @@ window.onload = function() {
 
 //Token verifier
 function verifyToken(){
-    if(document.getElementById('tokenInput')){
-        const token = document.getElementById('tokenInput').value.trim();
-        if(token.length === 0){
-            showWarning('Please enter a valid token.');
-            return;
-        }
-    }
-}
+    const token = document.getElementById('codeInput').value.trim();
 
+    if (!token) {
+        showWarning('Pega un token válido');
+        return;
+    }
+
+    // Prueba el token con /me
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://api.spotify.com/v1/me', true);
+    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            const user = JSON.parse(xhr.responseText);
+            accessToken = token;
+            localStorage.setItem('spotify_token', token);
+
+            document.getElementById('login-step-three').style.display = 'none';
+            document.getElementById('main').style.display = 'block';
+
+            getActiveDevice();
+            populateUI(user);
+            loadPopularPlaylists();
+            loadTopGenres();
+            loadLikedSongs();
+            setTimeout(initOrRefreshKeyboardNavigation, 1000);
+
+            showWarning('¡Conectado como ' + (user.display_name || user.id) + '!');
+        } else {
+            showWarning('Token inválido o expirado. Intenta de nuevo.');
+        }
+    };
+
+    xhr.onerror = function() {
+        showWarning('Error de red. Revisa tu conexión.');
+    };
+
+    xhr.send();
+}
+document.addEventListener('DOMContentLoaded', function() {
+    const submitBtn = document.getElementById('submitCodeBtn');
+    if (submitBtn) {
+        submitBtn.onclick = verifyToken;
+    }
+});
 function gotosection(section) {
     document.getElementById('main').style.display = 'none';
     document.getElementById('yourmusic').style.display = 'none';
