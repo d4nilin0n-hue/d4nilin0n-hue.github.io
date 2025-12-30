@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, max-scale=1.0, user-scalable=no">
-    <title>Auth Spotify para PS3</title>
+    <title>Pair</title>
+    <link rel="shortcut icon" href="./src/img/logo.png" type="image/x-icon">
+    <!-- tab logo -->
+    <style>@import url('https://fonts.googleapis.com/css2?family=Spotify+Sans:wght@400;700&display=swap');</style>
     <style>
         body { 
-            background: #121212; color: #fff; font-family: sans-serif;padding: 50px;
+            background: #121212; color: #fff;padding: 50px;
+            font-family: 'Spotify Sans', sans-serif;
         }
         button {
             padding: 15px 30px; 
@@ -131,7 +135,7 @@
                     })
                     .then(res => res.json())
                     .then(user => {
-                        document.getElementById('userinfo').style.display = 'block';
+                        document.getElementById('userInfo').style.display = 'block';
                         document.getElementById('userInfo').innerHTML = `<strong>${user.display_name || user.id}</strong>`;
 
                         document.getElementById('tokenDisplay').innerHTML = `
