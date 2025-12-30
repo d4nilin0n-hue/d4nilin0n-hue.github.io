@@ -61,10 +61,10 @@
         <h1>Enter the token shown on your device</h1>
         <input type="text" id="codeInput">
         <div class="button-container">
-            <button onclick="document.getElementById('login-step-three').style.display = 'none'; document.getElementById('login-step-two').style.display = 'block';">
+            <button onclick="document.getElementById('login-step-three').style.display = 'block'; document.getElementById('login-step-two').style.display = 'block';">
                 Back
             </button>
-            <button id="submitCodeBtn">
+            <button id="submitCodeBtn" onclick="verifyToken();">
                 Submit
             </button>
     </div>
