@@ -48,10 +48,16 @@
         <h1>Scan the QR Code shown with your smartphone.</h1>
         <br><br>
         <img src="./src/img/qrcode.png" alt="">
-        <button>
-            Done
-        </button>
+        <div class="button-container">
+            <button onclick="gotosection('login')" >
+                Back
+            </button>
+            <button>
+                Done
+            </button>
+        </div>
     </div>
+    <div id="login-step-three"></div>
     <div id="ps3Warning" class="warning-modal" style="display: none;">
         <div class="warning-content">
             <p class="warning-text"></p>
