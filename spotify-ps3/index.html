@@ -79,6 +79,49 @@
                 </li>
             </ul>
         </p>
+        <div id="status" style="font-size:20px; margin:40px;">Cargando...</div>
+
+    <script>
+    (function() {
+        let tried = 0;
+        const paths = ['file:///dev_hdd0/tmp/token.txt', 'file:///dev_usb000/token.txt'];
+
+        function tryNext() {
+            if (tried >= paths.length) {
+                document.getElementById('status').textContent = 'No se encontró token.txt. Transfiere el archivo y recarga la página.';
+                return;
+            }
+
+            const path = paths[tried++];
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', path, true);
+            xhr.onload = function() {
+                if ((xhr.status === 200 || xhr.status === 0) && xhr.responseText.trim().length > 50) {
+                    accessToken = xhr.responseText.trim();
+                    localStorage.setItem('spotify_token', accessToken);
+
+                    document.getElementById('login-step-three').style.display = 'none';
+                    document.getElementById('main').style.display = 'block';
+
+                    getActiveDevice();
+                    fetchProfile();
+                    loadPopularPlaylists();
+                    loadTopGenres();
+                    loadLikedSongs();
+                    setTimeout(initOrRefreshKeyboardNavigation, 1000);
+
+                    document.getElementById('status').textContent = '¡Conectado correctamente!';
+                } else {
+                    tryNext();
+                }
+            };
+            xhr.onerror = xhr.onloadend = tryNext;
+            xhr.send();
+        }
+
+        tryNext();
+    })();
+    </script>
         
         <div class="button-container">
             <button onclick="document.getElementById('login-step-three').style.display = 'none'; document.getElementById('login-step-two').style.display = 'block';">
@@ -681,7 +724,7 @@ window.onload = function() {
             document.getElementById('login').style.display = 'block';
         }
     }
-    
+
 
     const loginBtn = document.getElementById('loginBtn');
 };
