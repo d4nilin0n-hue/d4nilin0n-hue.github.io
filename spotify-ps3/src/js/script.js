@@ -599,10 +599,11 @@ function gotosection(section) {
         case 'pairqr':
             document.getElementById('login-step-two').style.display = 'block';
             break;
+        case 'login':
+            document.getElementById('login').style.display = 'block';
+            break;
     }
 }
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('loginBtn').onclick = function() {
-        gotosection('pairqr');
-    };
-});
+document.getElementById('loginBtn').onclick = function() {
+    gotosection('pairqr');
+};
