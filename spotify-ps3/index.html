@@ -3,7 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <title>Spotify</title>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="./style.css">
+        <link rel="shortcut icon" href="./src/img/logo.png" type="image/x-icon">
 </head>
 <body>
     <img src="./src/img/bg.png" alt="" class="bg">
@@ -60,8 +61,25 @@
         </div>
     </div>
     <div id="login-step-three" style="display: none;">
-        <h1>Enter the token shown on your device</h1>
-        <input type="text" id="codeInput">
+        <h1>Token finder</h1>
+        <p>
+            <b>
+                After generating the token on your phone, download the token.txt file and copy it to your PS3 using one of these two methods:
+            </b>
+            <ul>
+                <li>
+                    <i>Internal HDD (recommended – no USB needed)</i> <br>
+                    Place the file at: <br>
+                    <b>/dev_hdd0/tmp/token.txt</b>
+                </li>
+                <li>
+                    <i>USB drive</i> <br>
+                    Insert a USB drive in the PS3 and place the file at the root as: <br>
+                    <b>/dev_usb000/token.txt</b>
+                </li>
+            </ul>
+        </p>
+        
         <div class="button-container">
             <button onclick="document.getElementById('login-step-three').style.display = 'none'; document.getElementById('login-step-two').style.display = 'block';">
                 Back
