@@ -374,5 +374,18 @@ header nav button.sel {
     width: 20%;
     border-radius: 30px;
 }
-
-/*Hard work bro*/
+#login-step-two button{
+    padding: 14px 26px;
+    font-size: 22px;
+    margin: 10px 0;
+    background: transparent;
+    color: white;
+    border: 3px solid white;
+    -webkit-border-radius: 50px;
+    border-radius: 50px;
+    position: absolute;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    bottom: 25%;
+}
