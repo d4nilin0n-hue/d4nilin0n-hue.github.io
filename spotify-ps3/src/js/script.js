@@ -575,7 +575,7 @@ window.onload = function() {
 
 //Token verifier
 function verifyToken(){
-    const token = document.getElementById('codeInput').value.trim();
+    /*const token = document.getElementById('codeInput').value.trim();
 
     if (!token) {
         showWarning('Paste a valid token');
@@ -613,6 +613,33 @@ function verifyToken(){
         showWarning('Network error during token verification');
     };
 
+    xhr.send();*/
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'file:///dev_hdd0/tmp/token.txt', true); // o /dev_usb000/token.txt
+    xhr.onload = function() {
+        if (xhr.status === 200 || xhr.status === 0) { // status 0 es común en file://
+            const token = xhr.responseText.trim();
+            if (token) {
+                accessToken = token;
+                localStorage.setItem('spotify_token', token);
+                // Carga la app
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('main').style.display = 'block';
+                
+                getActiveDevice();
+                populateUI(user);
+                loadPopularPlaylists();
+                loadTopGenres();
+                loadLikedSongs();
+                setTimeout(initOrRefreshKeyboardNavigation, 1000);
+
+                showWarning('Connected as ' + (user.display_name || user.id) + '!');
+            }
+        }
+    };
+    xhr.onerror = function() {
+        showWarning('Couldn\'t read token from file. Please ensure token.txt exists in /dev_hdd0/tmp/ or /dev_usb000/');
+    };
     xhr.send();
 }
 document.addEventListener('DOMContentLoaded', function() {
