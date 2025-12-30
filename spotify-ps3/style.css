@@ -383,9 +383,21 @@ header nav button.sel {
     border: 3px solid white;
     -webkit-border-radius: 50px;
     border-radius: 50px;
+    margin-left: 20px;
+}
+#login-step-two .button-container{
     position: absolute;
     left: 50%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
     bottom: 25%;
+}
+#login-step-two button:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff;
+    cursor: pointer;
+}
+#login-step-two button:active {
+    background: rgba(255, 255, 255, 0.4);
+    color: rgb(0, 0, 0);
 }
