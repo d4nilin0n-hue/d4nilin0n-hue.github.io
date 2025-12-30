@@ -166,7 +166,7 @@ header nav button.sel {
 
 .ok-btn {
     background: none;
-    border: none;
+    border: none !important;
     padding: 15px 50px;
     color: #fff;
     font-size: 24px;
@@ -416,18 +416,33 @@ header nav button.sel {
     padding-top: 150px;
     background-color: #121212;
 }
-#login-step-three input{
+#login-step-three ul{
+    position: absolute;
     background: #121212;
     border: 1px solid #7c7c7c;
-    height: 37px;
-    text-align: center;
+    text-align: justify;
     border-radius: 6px;
     font-weight: bold;
     word-spacing: 5px;
     color: white;
     font-size: 15px;
     outline: none;
-    width: 70%;
+    width: 400px;
+    padding: 20px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+#login-step-three ul li:first-child{
+    margin-bottom: 20px;
+}
+#login-step-three ul li{
+    list-style: upper-roman;
+    margin-left: 20px;
+    font-weight: 300;
+}
+#login-step-three ul li b{
+    font-weight: bold;
 }
 #login-step-three button{
     padding: 14px 26px;
