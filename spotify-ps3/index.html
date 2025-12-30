@@ -19,24 +19,26 @@
             <img src="" class="pfp navigable" alt="pfp" tabindex="0">
         </div>
     </header>
-    <div id="main" style="display:none;">
-        <p class="title">WHAT DO YOU WANT TO HEAR TODAY?</p>
-        <div class="search-section" style="display: none;">
-            <input type="text" id="searchInput" placeholder="Search" />
-            <button id="searchBtn">Search</button>
-            <p class="playing">Active devices: <span id="deviceName">loading...</span></p>
+    <div id="main-screen-sections-container">
+        <div id="main" style="display:none;">
+            <p class="title">WHAT DO YOU WANT TO HEAR TODAY?</p>
+            <div class="search-section" style="display: none;">
+                <input type="text" id="searchInput" placeholder="Search" />
+                <button id="searchBtn">Search</button>
+                <p class="playing">Active devices: <span id="deviceName">loading...</span></p>
+            </div>
+            <div class="container--">
+                <div id="popularPlaylists" class="highlighted --section"></div>
+                <div class="division"></div>
+                <div id="topGenres" class="--section"></div>
+            </div>
+            <ul id="results"></ul>
         </div>
-        <div class="container--">
-            <div id="popularPlaylists" class="highlighted --section"></div>
-            <div class="division"></div>
-            <div id="topGenres" class="--section"></div>
-        </div>
-        <ul id="results"></ul>
-    </div>
-    <div id="yourmusic">
-        <p class="title">SONGS</p>
-        <div class="container--">
-            <div id="myFavouriteSongsSection" class="--section"></div>
+        <div id="yourmusic">
+            <p class="title">SONGS</p>
+            <div class="container--">
+                <div id="myFavouriteSongsSection" class="--section"></div>
+            </div>
         </div>
     </div>
     <div id="login">
@@ -77,6 +79,6 @@
             </button>
         </div>
     </div>
-    <script src="./src/js/script.js" async defer></script>
+    <script src="./src/js/script.js"></script>
 </body>
 </html>
