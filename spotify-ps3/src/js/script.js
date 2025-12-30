@@ -349,7 +349,7 @@ function getActiveDevice() {
             deviceId = active.id;
             document.getElementById('deviceName').textContent = active.name + ' (' + active.type + ')';
         } else {
-            document.getElementById('deviceName').textContent = 'Ninguno activo';
+            document.getElementById('deviceName').textContent = 'No active device';
         }
     });
 }
@@ -570,25 +570,39 @@ window.onload = function() {
     }
 
     const loginBtn = document.getElementById('loginBtn');
-    if (loginBtn) {
-        loginBtn.addEventListener('click', function() {
-            gotosection('pairqr');
-        });
-    }
 };
-function gotosection(section){
-    switch(section){
+
+//Token verifier
+function verifyToken(){
+    if(document.getElementById('tokenInput')){
+        const token = document.getElementById('tokenInput').value.trim();
+        if(token.length === 0){
+            showWarning('Please enter a valid token.');
+            return;
+        }
+    }
+}
+
+function gotosection(section) {
+    document.getElementById('main').style.display = 'none';
+    document.getElementById('yourmusic').style.display = 'none';
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('login-step-two').style.display = 'none';
+
+    switch(section) {
         case 'yourmusic':
-            document.getElementById("main").style.left = "-300vw";
-            document.getElementById('yourmusic').style.left = "60px";
+            document.getElementById('yourmusic').style.display = 'block';
             break;
         case 'browse':
-            document.getElementById('yourmusic').style.left = "300vw";
-            document.getElementById('main').style.left = "60px";
+            document.getElementById('main').style.display = 'block';
             break;
         case 'pairqr':
-            document.getElementById("login").style.display = "none";
-            document.getElementById("login-step-two").style.display = "block";
+            document.getElementById('login-step-two').style.display = 'block';
             break;
     }
 }
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('loginBtn').onclick = function() {
+        gotosection('pairqr');
+    };
+});
