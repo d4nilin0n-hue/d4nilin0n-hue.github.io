@@ -654,93 +654,75 @@ function getTokenFromHash() {
 }
 
 window.onload = function() {
-    accessToken = getTokenFromHash();
-
+    accessToken = localStorage.getItem('spotify_token');
     if (accessToken) {
-        history.replaceState({}, document.title, REDIRECT_URI);
-
         document.getElementById('login').style.display = 'none';
         document.getElementById('main').style.display = 'block';
-
         getActiveDevice();
         fetchProfile();
         loadPopularPlaylists();
         loadTopGenres();
         loadLikedSongs();
         setTimeout(initOrRefreshKeyboardNavigation, 1000);
-    }
-
-    const loginBtn = document.getElementById('loginBtn');
-};
-
-//Token verifier
-function verifyToken(){
-    /*const token = document.getElementById('codeInput').value.trim();
-
-    if (!token) {
-        showWarning('Paste a valid token');
-        return;
-    }
-
-    // Prueba el token con /me
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://api.spotify.com/v1/me', true);
-    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            const user = JSON.parse(xhr.responseText);
-            accessToken = token;
-            localStorage.setItem('spotify_token', token);
-
-            document.getElementById('login-step-three').style.display = 'none';
+    } else {
+        const tokenFromHash = getTokenFromHash();
+        if (tokenFromHash) {
+            accessToken = tokenFromHash
+            localStorage.setItem('spotify_token', accessToken);
+            document.getElementById('login').style.display = 'none';
             document.getElementById('main').style.display = 'block';
-
             getActiveDevice();
-            populateUI(user);
+            fetchProfile();
             loadPopularPlaylists();
             loadTopGenres();
             loadLikedSongs();
             setTimeout(initOrRefreshKeyboardNavigation, 1000);
-
-            showWarning('Connected as ' + (user.display_name || user.id) + '!');
         } else {
-            showWarning('Invalid or expired token. Please try again.');
+            document.getElementById('login').style.display = 'block';
         }
-    };
+    }
+    
 
-    xhr.onerror = function() {
-        showWarning('Network error during token verification');
-    };
+    const loginBtn = document.getElementById('loginBtn');
+};
+function verifyToken() {
+    let tokenFound = false;
 
-    xhr.send();*/
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'file:///dev_hdd0/tmp/token.txt', true); // o /dev_usb000/token.txt
-    xhr.onload = function() {
-        if (xhr.status === 200 || xhr.status === 0) { // status 0 es común en file://
-            const token = xhr.responseText.trim();
-            if (token) {
-                accessToken = token;
-                localStorage.setItem('spotify_token', token);
-                // Carga la app
+    function tryPath(path) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', path, true);
+        xhr.onload = function() {
+            if ((xhr.status === 200 || xhr.status === 0) && xhr.responseText.trim().length > 50) { // token típico > 50 chars
+                accessToken = xhr.responseText.trim();
+                localStorage.setItem('spotify_token', accessToken);
+
                 document.getElementById('login-step-three').style.display = 'none';
                 document.getElementById('main').style.display = 'block';
-                
+
                 getActiveDevice();
-                populateUI(user);
+                fetchProfile();
                 loadPopularPlaylists();
                 loadTopGenres();
                 loadLikedSongs();
                 setTimeout(initOrRefreshKeyboardNavigation, 1000);
 
-                showWarning('Connected as ' + (user.display_name || user.id) + '!');
+                showWarning('Connected successfully!');
+                tokenFound = true;
             }
-        }
-    };
-    xhr.onerror = function() {
-        showWarning('Couldn\'t read token from file. Please ensure token.txt exists in /dev_hdd0/tmp/ or /dev_usb000/');
-    };
-    xhr.send();
+        };
+        xhr.onerror = xhr.onloadend = function() {
+            if (!tokenFound) {
+                if (path === 'file:///dev_hdd0/tmp/token.txt') {
+                    tryPath('file:///dev_usb000/token.txt');
+                } else {
+                    showWarning('token.txt not found in internal HDD or USB. Transfer the file and try again.');
+                }
+            }
+        };
+        xhr.send();
+    }
+
+    tryPath('file:///dev_hdd0/tmp/token.txt');
 }
 document.addEventListener('DOMContentLoaded', function() {
     const submitBtn = document.getElementById('submitCodeBtn');
@@ -753,6 +735,7 @@ function gotosection(section) {
     document.getElementById('yourmusic').style.display = 'none';
     document.getElementById('login').style.display = 'none';
     document.getElementById('login-step-two').style.display = 'none';
+    document.getElementById('login-step-three').style.display = 'none';
 
     switch(section) {
         case 'yourmusic':
@@ -764,14 +747,17 @@ function gotosection(section) {
         case 'pairqr':
             document.getElementById('login-step-two').style.display = 'block';
             break;
-        case 'login':
-            document.getElementById('login').style.display = 'block';
+        case 'tokeninput':
+            document.getElementById('login-step-three').style.display = 'block';
             break;
     }
 }
-document.getElementById('loginBtn').onclick = function() {
-    gotosection('pairqr');
-};
+document.addEventListener('DOMContentLoaded', function() {
+    const submitBtn = document.getElementById('submitCodeBtn');
+    if (submitBtn) {
+        submitBtn.onclick = verifyToken; // Asignación directa, la más compatible
+    }
+});
     </script>
 </body>
 </html>
