@@ -2,9 +2,13 @@
     "latest_version": "Aurora 1.0",
     "release_date": "2026-02-17",
     "changelog": [
-        "Added welcome notification upon unlocking the system.",
-        "Improved notification system with smooth entry animations.",
-        "Minor bug fixes and performance improvements.",
-        "Updated Workspace quick settings menu for better usability."
+        "Canary Test: Testing OTA file system stability.",
+        "Updating testupdate/test.js to verify remote fetch."
+    ],
+    "files": [
+        {
+            "remote": "https://raw.githubusercontent.com/d4nilin0n-hue/d4nilin0n-hue.github.io/refs/heads/main/mokeos-server/updates/var/fs/testupdate/test.js",
+            "local": "/testupdate/test.js"
+        }
     ]
 }
