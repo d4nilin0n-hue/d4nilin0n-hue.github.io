@@ -1,0 +1,10 @@
+{
+    "latest_version": "Aurora 1.0",
+    "release_date": "2025-06-15",
+    "changelog": [
+        "Added welcome notification upon unlocking the system.",
+        "Improved notification system with smooth entry animations.",
+        "Minor bug fixes and performance improvements.",
+        "Updated Workspace quick settings menu for better usability."
+    ],
+}
