@@ -7,7 +7,7 @@
     "files": [
         {
             "remote": "https://raw.githubusercontent.com/d4nilin0n-hue/d4nilin0n-hue.github.io/refs/heads/main/mokeos-server/updates/script.js",
-            "local": "../testupdate/test.js"
+            "local": "../script.js"
         }
     ]
 }
