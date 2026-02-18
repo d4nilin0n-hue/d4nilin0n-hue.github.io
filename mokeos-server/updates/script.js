@@ -1,7 +1,7 @@
 const WINDOW_MANAGER_SELECTOR = ".window-manager";
 const WINDOW_DRAG_HANDLE_CLASS = ".window-drag-handle";
 const WINDOW_APP_NAME_CONTAINER = ".current_app__name button";
-const CURRENT_OS_VERSION = "Aurora 1.0 Beta";
+const CURRENT_OS_VERSION = "mokeOS Nebula Beta";
 const UPDATE_SERVER_URL = 'https://raw.githubusercontent.com/d4nilin0n-hue/d4nilin0n-hue.github.io/refs/heads/main/mokeos-server/updates/update.json';
 const FileSystem_root = 'http://127.0.0.1:7777';
 const __SYSTEM__WATCHDOG = new BroadcastChannel("__SYSTEM__WATCHDOG-for_mokeOS");
