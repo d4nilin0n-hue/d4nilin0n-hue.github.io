@@ -1,14 +1,13 @@
 {
-    "latest_version": "Aurora 1.0",
+    "latest_version": "Aurora 1.0 Beta",
     "release_date": "2026-02-17",
     "changelog": [
-        "Canary Test: Testing OTA file system stability.",
-        "Updating testupdate/test.js to verify remote fetch."
+        "Small update. Changes from Aurora 0.9 to 1.0 Beta",
     ],
     "files": [
         {
-            "remote": "https://raw.githubusercontent.com/d4nilin0n-hue/d4nilin0n-hue.github.io/refs/heads/main/mokeos-server/updates/var/fs/testupdate/test.js",
-            "local": "/testupdate/test.js"
+            "remote": "https://raw.githubusercontent.com/d4nilin0n-hue/d4nilin0n-hue.github.io/refs/heads/main/mokeos-server/updates/script.js",
+            "local": "../testupdate/test.js"
         }
     ]
 }
