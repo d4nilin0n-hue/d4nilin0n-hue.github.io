@@ -2,7 +2,8 @@
 
 A nostalgic recreation of the classic old Spotify interface (circa 2012–2014), built as a fully functional web app using the modern Spotify Web API. Designed to feel like the original desktop/PS3 app: dark theme, genre cards with cover backgrounds, keyboard navigation with arrow keys, PS3-style warning modals, and remote control playback via Spotify Connect.
 
-Live demo: https://d4nilin0n-hue.github.io
+Live demo: https://d4nilin0n-hue.github.io/spotify-ps3/index.html
+
 
 ## Features
 
