@@ -1,8 +1,8 @@
+#mokeOS beta!!
 CC = i686-elf-gcc
 AS = nasm
 LNK = i686-elf-ld
 
-# Archivos
 OBJS = boot.o kernel.o
 OUTPUT = mokeos.bin
 

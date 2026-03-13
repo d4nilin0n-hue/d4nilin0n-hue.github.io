@@ -1,3 +1,11 @@
+/*        
+ ▄              ▄▄          
+ ███▄███▄ ▄███▄ ██ ▄█▀ ▄█▀█▄
+ ██ ██ ██ ██ ██ ████   ██▄█▀
+▄██ ██ ▀█▄▀███▀▄██ ▀█▄▄▀█▄▄▄
+
+made with love by: daniel (nomil)
+*/
 #define MAX_BUFFER 256
 typedef unsigned int   uint32_t;
 typedef unsigned long long uint64_t;
