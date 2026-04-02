@@ -5,7 +5,7 @@
         "/services/": "Services",
         "/aboutme/": "About Daniel",
         "/contact/": "Contact Daniel",
-        "/notfound/": "Not found"
+        "/404.html": "Not found"
     }
     const currentTitle = pagesList[window.location.pathname];
     
