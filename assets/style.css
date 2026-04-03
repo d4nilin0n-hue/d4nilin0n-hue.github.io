@@ -10,7 +10,82 @@ body{
     -webkit-user-drag: none;
     scroll-behavior: smooth;
     font-family: "Ubuntu", sans-serif;
+    cursor: default;
+    padding-bottom:60px;
+    opacity: 0;
+    transition: .3s opacity;
+}
+body.ready{
+    opacity: 1;
 }
 h1{
     font-family: "Noto Serif", serif;
+}
+.banner{
+    width: 96vw;
+    max-width: 1500px;
+    margin: 2vw auto;
+    background: rgba(221, 221, 221, .6);
+    padding: 100px 20px;
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, .3);
+    box-sizing: border-box;
+}
+
+.banner h1{
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto 30px;
+    text-align: center;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    transition: filter .4s;
+}
+
+.banner .links{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.banner p{
+    margin: 0;
+    opacity: .6;
+    cursor: pointer;
+    transition: transform .2s, opacity .3s, text-shadow .1s;
+    font-weight: 500;
+}
+
+.banner p:hover{
+    transform: translateY(-2px);
+    opacity: 1;
+}
+
+.banner:has(.links:hover) h1{
+    filter: blur(4px);
+}
+
+@media screen and (max-width: 768px){
+    .banner{
+        padding: 60px 20px;
+        width: 92vw;
+    }
+    .banner h1{
+        font-size: 1.8rem;
+        width: 100%;
+        text-align: center;
+    }
+
+    .banner .links{
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .banner p{
+        font-size: 1.1rem;
+        padding: 10px;
+    }
 }

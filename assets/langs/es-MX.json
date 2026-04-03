@@ -1,0 +1,26 @@
+{
+    "header": {
+        "labs": "Labs",
+        "services": "Servicios",
+        "about_me": "Sobre mí",
+        "contact": "Contacto",
+        "home": "Inicio"
+    },
+    "hero": {
+        "home": {
+            "title": "Ingeniería de sistemas desde el kernel\" o \"Soluciones de bajo nivel para problemas de alto nivel",
+            "links": {
+                "view_labs": "[Explorar Labs]",
+                "hire_me": "[Contratar]"
+            }
+        }
+    },
+    "footer": {
+        "tagline": "Soluciones de bajo nivel para problemas de alto nivel.",
+        "links_title": "Enlaces Rápidos",
+        "status_title": "Estado",
+        "status_available": "Disponible para nuevos proyectos",
+        "handcraft": "Orgullosamente Mexicano",
+        "donot": "© 2026 Daniel Limón. Todos los derechos reservados."
+    }
+}

@@ -1,20 +1,25 @@
-(function(){
+/*
+    Header Version 1.0
+    Made by: Daniel Limón, for: daniellimon.com
+*/
+
+(async function(){
     const headerHTML = `<ul class="left">
-    <li data-page="/labs/">Labs</li>
-    <li data-page="/services/">Services</li>
+    <li data-page="/labs/">${translation.header.labs}</li>
+    <li data-page="/services/">${translation.header.services}</li>
 </ul>
-<img src="/logo.png" alt="Daniel Limon">
+<img src="/assets/img/logo.png" alt="Daniel Limon">
 <ul class="right">
-    <li data-page="/aboutme/">About me</li>
-    <li data-page="/contact/">Contact</li>
+    <li data-page="/aboutme/">${translation.header.about_me}</li>
+    <li data-page="/contact/">${translation.header.contact}</li>
 </ul>
 <div class="cursor"></div>
 <select id="current-website">
-    <option value="/">Home</option>
-    <option value="/labs/">Labs</option>
-    <option value="/services/">Services</option>
-    <option value="/aboutme/">About me</option>
-    <option value="/contact/">Contact</option>
+    <option value="/">${translation.header.home}</option>
+    <option value="/labs/">${translation.header.labs}</option>
+    <option value="/services/">${translation.header.services}</option>
+    <option value="/aboutme/">${translation.header.about_me}</option>
+    <option value="/contact/">${translation.header.contact}</option>
 </select>`;
 
     const headerCSS = `header{
@@ -23,6 +28,7 @@
     height: 50px;
     top: 2vw;
     left: 50%;
+    z-index: 2;
     transform: translateX(-50%);
     overflow: hidden;
     border-radius: 20px;
@@ -31,7 +37,7 @@
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, .3);
-    max-width: 1500px;
+    max-width: 1300px;
     box-shadow: 0px 10px 43px 0px rgba(0,0,0,0.2);
     -webkit-box-shadow: 0px 10px 43px 0px rgba(0,0,0,0.2);
     -moz-box-shadow: 0px 10px 43px 0px rgba(0,0,0,0.2);
@@ -42,6 +48,7 @@ header img{
     top: 5px;
     left: 50%;
     transform: translateX(-50%);
+    cursor: pointer;
 }
 header ul.left{
     position: absolute;
@@ -59,13 +66,14 @@ header ul.right{
 }
 header ul li{
     list-style: none;
-    margin-left: 30px;
-    margin-right: 30px;
+    /*margin-left: 30px;
+    margin-right: 30px;*/
     letter-spacing: 0.05em;
     transition: transform .5s, filter .2s, text-shadow .1s;
     cursor: pointer;
     width: 110px;
     text-align: center;
+    transition-delay: filter .1s;
 }
 header:has(li:hover) li {
     filter: blur(1px);
@@ -84,14 +92,17 @@ header .cursor{
     left: calc(50% - 50px);
     width: 100px;
     height: 3px;
-    background: black;
+    background: rgba(0, 0, 0, .3);
     transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1), height .2s;
     will-change: transform, width;
+    pointer-events: none;
+    z-index: 0;
+    transform-origin: center;
 }
 header select{
     display: none;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 768px){
     header ul{
         display: none !important;
     }
@@ -110,67 +121,126 @@ header select{
         top: 10px;
         width: 30%;
     }
-}`;
+}
 
-    const temp_header = document.createElement('header');
-    temp_header.innerHTML = headerHTML;
-
-    const temp_header_css = document.createElement('style');
-    temp_header_css.innerHTML = headerCSS;
-
-    const current_option = document.querySelector(`select option[value="${window.location.pathname}"]`);
-    const activeLi = document.querySelector(`li[data-page="${window.location.pathname}"]`);
-
-    temp_header.querySelectorAll('ul li').forEach((el) => {
-        el.addEventListener("mouseover", () => {
-            var rect = el.getBoundingClientRect();
-            changeCursorPos(rect.left);
-        });
-
-        el.addEventListener('click', () => {
-            document.location.href = el.getAttribute('data-page');
-        });
-    });
+div[header-gradient]{
+    position: fixed;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(4vw + 50px);
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 100%);
+}
     
-    temp_header.querySelector('img').addEventListener('mouseover', () => {
-        changeCursorPos(document.querySelector('header img').getBoundingClientRect().left);
-    });
+div[header-space]{
+    width: 100%;
+    margin: 0;
+    margin-bottom: calc(4vw + 50px);
+}`;
+    var headerTimeout, temp_header, current_option, activeLi, logoPos, temp_header_space, temp_header_gradient;
 
-    temp_header.querySelector('img').addEventListener('click', () => {
-        if(window.location.pathname == '/'){
-            return;
+    function render(){
+        temp_header = document.createElement('header');
+        temp_header_space = document.createElement('div');
+        temp_header_gradient = document.createElement('div');
+    
+        temp_header.innerHTML = headerHTML;
+
+        const temp_header_css = document.createElement('style');
+        temp_header_css.innerHTML = headerCSS;
+
+        temp_header_space.setAttribute('header-space', 'true');
+        temp_header_gradient.setAttribute('header-gradient', 'true');
+
+        document.head.appendChild(temp_header_css);
+        document.body.prepend(temp_header);
+        document.body.prepend(temp_header_gradient);
+        document.body.prepend(temp_header_space);
+
+        //On end:
+        current_option = temp_header.querySelector(`select option[value="${window.location.pathname}"]`);
+        activeLi = temp_header.querySelector(`li[data-page="${window.location.pathname}"]`);
+    }
+    function renderPositions(){
+        logoPos = temp_header.querySelector('header img').getBoundingClientRect();
+        /* 
+            Why onmouseover and not addEventListener?
+            Because onmouseover rewrites the previous assigned callback,
+            while addEventListener does not and stack them up
+            leading to a crappy UI and UX
+        */
+        temp_header.querySelectorAll('ul li').forEach((el) => {
+            el.onmouseover = () => {
+                var rect = el.getBoundingClientRect();
+                changeCursorPos(rect.left, rect.width);
+            }
+        });
+
+        temp_header.onclick = (el) => {
+            if(el.target.matches('li')){
+                document.body.classList.remove('ready');
+                setTimeout(() => {
+                    window.location.href = el.target.getAttribute('data-page');
+                }, 300);
+            }
         }
-        window.location.href = '/';
-        window.scrollTo(0, 0);
-    });
 
-    temp_header.querySelector('select').addEventListener('change', () => {
-        window.location.href = temp_header.querySelector('select').value;
-    });
+        temp_header.querySelector('img').onmouseover = () => {
+            changeCursorPos(logoPos.left - 110, logoPos.width);
+        }
 
-    if(current_option){
-        current_option.setAttribute("disabled", "true");
-        current_option.setAttribute("selected", "true");
+        temp_header.querySelector('img').onclick = () => {
+            if(window.location.pathname == '/'){
+                window.scrollTo(0, 0);
+                return;
+            }
+            document.body.classList.remove('ready');
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 300);
+        }
+
+        temp_header.querySelector('select').onchange = () => {
+            document.body.classList.remove('ready');
+            setTimeout(() => {
+                window.location.href = temp_header.querySelector('select').value;
+            }, 300);
+        }
+
+        if(current_option){
+            current_option.setAttribute("disabled", "true");
+            current_option.setAttribute("selected", "true");
+        }
+
+        if(window.location.pathname != '/' && activeLi){
+            temp_header.querySelector('.cursor').style.transition = 'none';
+            let cursorX = temp_header.querySelector(`li[data-page="${window.location.pathname}"]`).getBoundingClientRect().left;
+            temp_header.querySelector('.cursor').style.left = `calc(${cursorX}px - 30px)`;
+            setTimeout(() => {
+                temp_header.querySelector('.cursor').style.transition = 'all 0.5s cubic-bezier(0.19, 1, 0.22, 1), height .2s';
+            }, 100);
+        }
     }
 
-    function changeCursorPos(x){
-        document.querySelector('header .cursor').style.left = `calc(${x}px - 20px)`;
-        document.querySelector('header .cursor').style.height = '2px';
-        document.querySelector('header .cursor').style.transform = 'scaleX(1.2)';
-        setTimeout(() => {
-            document.querySelector('header .cursor').style.transform = 'none';
-            document.querySelector('header .cursor').style.height = '3px';
+    function changeCursorPos(x, width){
+        /*
+            Clears current interval so cursor never crashes out
+        */
+        clearTimeout(headerTimeout);
+
+        temp_header.querySelector('.cursor').style.left = `calc(${x}px - 10px - ${width}px / 2)`;
+        temp_header.querySelector('.cursor').style.height = '2px';
+        temp_header.querySelector('.cursor').style.transform = 'scaleX(1.2)';
+        headerTimeout = setTimeout(() => {
+            temp_header.querySelector('.cursor').style.transform = 'none';
+            temp_header.querySelector('.cursor').style.height = '3px';
         }, 200);
     }
-    document.head.appendChild(temp_header_css);
-    document.body.prepend(temp_header);
-
-    if(window.location.pathname != '/' && activeLi){
-        document.querySelector('.cursor').style.transition = 'none';
-        let cursorX = document.querySelector(`li[data-page="${window.location.pathname}"]`).getBoundingClientRect().left;
-        document.querySelector('.cursor').style.left = `calc(${cursorX}px - 20px)`;
-        window.addEventListener('load', () => {
-            document.querySelector('.cursor').style.transition = 'all 0.5s cubic-bezier(0.19, 1, 0.22, 1), height .2s';
-        })
-    }
+    
+    window.addEventListener('resize', () => {
+        renderPositions();
+    })
+    render();
+    renderPositions();
 })();

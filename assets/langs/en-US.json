@@ -1,0 +1,26 @@
+{
+    "header": {
+        "labs": "Labs",
+        "services": "Services",
+        "about_me": "About me",
+        "contact": "Contact",
+        "home": "Home"
+    },
+    "hero": {
+        "home": {
+            "title": "Engineering systems from the kernel up\" o \"Building low-level solutions for high-level problems",
+            "links": {
+                "view_labs": "[View labs]",
+                "hire_me": "[Hire me]"
+            }
+        }
+    },
+    "footer": {
+        "tagline": "Building low-level solutions for high-level problems.",
+        "links_title": "Quick Links",
+        "status_title": "Availability",
+        "status_available": "Available for new projects",
+        "handcraft": "Handcrafted in Mexico",
+        "donot": "© 2026 Daniel Limón. Do not copy."
+    }
+}
