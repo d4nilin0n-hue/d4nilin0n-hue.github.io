@@ -28,7 +28,7 @@
     document.head.appendChild(icn);
     document.head.appendChild(touch);
 
-    const cfgRequest = new Request(`${window.location.pathname}/cfg.json`);
+    const cfgRequest = new Request(`${window.location.pathname}cfg.json`);
     var settings;
 
     fetch(cfgRequest).then((response) => {
@@ -88,6 +88,16 @@
             if (el) {
                 e.preventDefault();
                 const href = el.getAttribute('href') || el.dataset.href; 
+                document.body.classList.remove('ready');
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 300);
+            }
+
+            const sec_el = e.target.closest('p');
+            if(sec_el){
+                e.preventDefault();
+                const href = sec_el.getAttribute('href') || sec_el.dataset.href; 
                 document.body.classList.remove('ready');
                 setTimeout(() => {
                     window.location.href = href;

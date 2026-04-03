@@ -28,7 +28,7 @@
     height: 50px;
     top: 2vw;
     left: 50%;
-    z-index: 2;
+    z-index: 10000;
     transform: translateX(-50%);
     overflow: hidden;
     border-radius: 20px;
@@ -125,12 +125,12 @@ header select{
 
 div[header-gradient]{
     position: fixed;
-    z-index: 0;
+    z-index: 9999;
     top: 0;
     left: 0;
     width: 100%;
     height: calc(4vw + 50px);
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 100%);
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 100%);z
 }
     
 div[header-space]{
@@ -216,7 +216,7 @@ div[header-space]{
         if(window.location.pathname != '/' && activeLi){
             temp_header.querySelector('.cursor').style.transition = 'none';
             let cursorX = temp_header.querySelector(`li[data-page="${window.location.pathname}"]`).getBoundingClientRect().left;
-            temp_header.querySelector('.cursor').style.left = `calc(${cursorX}px - 30px)`;
+            temp_header.querySelector('.cursor').style.left = `calc(${cursorX}px - 70px)`;
             setTimeout(() => {
                 temp_header.querySelector('.cursor').style.transition = 'all 0.5s cubic-bezier(0.19, 1, 0.22, 1), height .2s';
             }, 100);

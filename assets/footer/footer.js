@@ -32,8 +32,7 @@
         </div>`;
 
     const footerCSS = `footer{
-    position:absolute;
-    bottom:-450px;
+    margin-top: 10%;
     width: 96vw;
     height:500px;
     max-width: 1500px;

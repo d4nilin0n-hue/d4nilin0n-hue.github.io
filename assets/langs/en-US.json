@@ -13,6 +13,9 @@
                 "view_labs": "[View labs]",
                 "hire_me": "[Hire me]"
             }
+        },
+        "labs": {
+            "title": "Welcome to Daniel's lab"
         }
     },
     "footer": {
@@ -22,5 +25,17 @@
         "status_available": "Available for new projects",
         "handcraft": "Handcrafted in Mexico",
         "donot": "© 2026 Daniel Limón. Do not copy."
+    },
+    "labs": {
+        "mokeos": {
+            "short_desc": "A custom monolithic kernel and operating system built from the ground up, focusing on high-performance memory management and a minimalist skeuomorphic interface.",
+            "description": "mokeOS is an ambitious systems engineering project dedicated to exploring the fundamentals of low-level computing. Developed as a custom monolithic kernel, it features a proprietary file system (MFS), advanced encrypted messaging protocols, and a dedicated system architecture designed for x86 platforms. Beyond the kernel, mokeOS bridges the gap between hardware and user experience by implementing a unique visual language. Inspired by early Apple design principles, the OS utilizes a 'Liquid Glass' UI engine, proving that high-performance system code can coexist with sophisticated, fluid aesthetics."
+        },
+        "lemonrepo": {
+            "short_desc": "LemonRepo is a curated library of high-quality iOS apps and games, focused on performance, stability, and real-world usability.\n\nNo clutter. No junk. Just the essentials."
+        },
+        "moketube": {
+            "short_desc": "MokeTube is a native tvOS application designed to provide a seamless, ad-free viewing experience by leveraging decentralized Invidious instances. Built with SwiftUI and Combine, the project demonstrates advanced architectural patterns for handling asynchronous media streaming and polymorphic data parsing."
+        }
     }
 }

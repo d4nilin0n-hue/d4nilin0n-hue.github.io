@@ -13,6 +13,9 @@
                 "view_labs": "[Explorar Labs]",
                 "hire_me": "[Contratar]"
             }
+        },
+        "labs": {
+            "title": "Bienvenido al laboratorio"
         }
     },
     "footer": {

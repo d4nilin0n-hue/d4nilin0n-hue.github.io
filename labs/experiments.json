@@ -1,0 +1,41 @@
+{
+    "mokeOS": {
+        "name": "mokeOS",
+        "version": "Alpha",
+        "status": "Testing",
+        "langs": [
+            "C",
+            "Assembly",
+            "MokeUI"
+        ],
+        "href": "/labs/mokeos",
+        "github": "https://github.com/atdaniellimon/mokeOS",
+        "description": "{{labs.mokeos.description}}",
+        "short_desc": "{{labs.mokeos.short_desc}}"
+    },
+    "LemonRepo": {
+        "name": "LemonRepo",
+        "version": "1.2",
+        "status": "Stable",
+        "langs": [
+            "JSON"    
+        ],
+        "href": "/labs/lemonrepo",
+        "github": "https://github.com/atdaniellimon/LemonRepo",
+        "description": "{{labs.lemonrepo.description}}",
+        "short_desc": "{{labs.lemonrepo.short_desc}}"
+    },
+    "MokeTube": {
+        "name": "MokeTube",
+        "version": "1.0",
+        "status": "Stable",
+        "langs": [
+            "Swift",
+            "SwiftUI"
+        ],
+        "href": "/labs/moketube",
+        "github": "https://github.com/atdaniellimon/LemonRepo",
+        "description": "{{labs.mokeos.description}}",
+        "short_desc": "{{labs.moketube.short_desc}}"
+    }
+}
