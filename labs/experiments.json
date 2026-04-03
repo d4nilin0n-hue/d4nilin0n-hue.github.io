@@ -37,5 +37,19 @@
         "github": "https://github.com/atdaniellimon/LemonRepo",
         "description": "{{labs.mokeos.description}}",
         "short_desc": "{{labs.moketube.short_desc}}"
+    },
+    "MokeCar": {
+        "name": "Moke Infotainment",
+        "version": "Beta",
+        "status": "Testing",
+        "langs": [
+            "JavaScript",
+            "Python",
+            "HTML",
+            "CSS"
+        ],
+        "href": "https://github.com/atdaniellimon/MokeDrive",
+        "description": "{{labs.mokeinfotainment.description}}",
+        "short_desc": "{{labs.mokeinfotainment.short_desc}}"
     }
 }

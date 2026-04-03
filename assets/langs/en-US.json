@@ -36,6 +36,9 @@
         },
         "moketube": {
             "short_desc": "MokeTube is a native tvOS application designed to provide a seamless, ad-free viewing experience by leveraging decentralized Invidious instances. Built with SwiftUI and Combine, the project demonstrates advanced architectural patterns for handling asynchronous media streaming and polymorphic data parsing."
+        },
+        "mokeinfotainment": {
+            "short_desc": "MokeCar (or Moke Infotainment) is a mock infotainment system based on web technologies with the goal of researching and testing out how they work."
         }
     }
 }
