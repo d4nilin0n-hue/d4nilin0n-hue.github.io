@@ -5,7 +5,8 @@
         "/services/": "Services",
         "/aboutme/": "About Daniel",
         "/contact/": "Contact Daniel",
-        "/404.html": "Not found"
+        "/404.html": "Not found",
+        "/project/": "Overview"
     }
     const currentTitle = pagesList[window.location.pathname];
     
@@ -31,35 +32,40 @@
     fetch(cfgRequest).then((response) => {
         if(!response.ok){
             throw new Error("No cfg file found or http error");
+
+            settings = {
+                'header': false,
+                'footer': false
+            }
         }
         return response.json();
     }).then((json) => {
         settings = json;
     })
 
-    window.addEventListener("Translations_Ready", () => {
+    window.addEventListener("Translations_Ready", async () => {
         Moke.Hydration.register(translation);
-        document.body.classList.add('ready');
         if(settings?.header !== false){
-            Moke.import({
+            await Moke.import({
                 piece: 'Header',
                 def_route: true
             });
         }
 
         if(settings?.footer !== false){
-            Moke.import({
+            await Moke.import({
                 piece: 'Footer',
                 def_route: true
             });
         }
 
+        document.body.classList.add('ready');
         /* 
             Kidnap browser's default callback and change it with my own
         */
         document.body.addEventListener('click', (e) => {
             const el = e.target.closest('a');
-            if (el) {
+            if(el && !el.getAttribute('href').startsWith('#')){
                 e.preventDefault();
                 const href = el.getAttribute('href') || el.dataset.href; 
                 document.body.classList.remove('ready');

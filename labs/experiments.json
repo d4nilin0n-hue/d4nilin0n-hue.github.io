@@ -11,7 +11,8 @@
         "href": "/labs/mokeos",
         "github": "https://github.com/atdaniellimon/mokeOS",
         "description": "{{labs.mokeos.description}}",
-        "short_desc": "{{labs.mokeos.short_desc}}"
+        "short_desc": "{{labs.mokeos.short_desc}}",
+        "id": "mokeOS"
     },
     "LemonRepo": {
         "name": "LemonRepo",
@@ -23,7 +24,8 @@
         "href": "/labs/lemonrepo",
         "github": "https://github.com/atdaniellimon/LemonRepo",
         "description": "{{labs.lemonrepo.description}}",
-        "short_desc": "{{labs.lemonrepo.short_desc}}"
+        "short_desc": "{{labs.lemonrepo.short_desc}}",
+        "id": 2
     },
     "MokeTube": {
         "name": "MokeTube",
@@ -36,7 +38,8 @@
         "href": "/labs/moketube",
         "github": "https://github.com/atdaniellimon/LemonRepo",
         "description": "{{labs.mokeos.description}}",
-        "short_desc": "{{labs.moketube.short_desc}}"
+        "short_desc": "{{labs.moketube.short_desc}}",
+        "id": 3
     },
     "MokeCar": {
         "name": "Moke Infotainment",
@@ -50,7 +53,8 @@
         ],
         "href": "https://github.com/atdaniellimon/MokeDrive",
         "description": "{{labs.mokeinfotainment.description}}",
-        "short_desc": "{{labs.mokeinfotainment.short_desc}}"
+        "short_desc": "{{labs.mokeinfotainment.short_desc}}",
+        "id": 4
     },
     "Newton": {
         "name": "Newton AI",
@@ -64,7 +68,8 @@
         ],
         "href": "https://github.com/atdaniellimon/NewtonAI",
         "description": "{{labs.newton.description}}",
-        "short_desc": "{{labs.newton.short_desc}}"
+        "short_desc": "{{labs.newton.short_desc}}",
+        "id": 5
     },
     "Glaze": {
         "name": "Glaze",
@@ -77,6 +82,7 @@
         ],
         "href": "https://github.com/atdaniellimon/Glaze",
         "description": "{{labs.glaze.description}}",
-        "short_desc": "{{labs.glaze.short_desc}}"
+        "short_desc": "{{labs.glaze.short_desc}}",
+        "id": 6
     }
 }

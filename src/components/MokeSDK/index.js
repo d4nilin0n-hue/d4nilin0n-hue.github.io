@@ -238,6 +238,13 @@
                     });
                     return this;
                 },
+                text(text){
+                    this.nodes.forEach(el => {
+                        el.innerText = text;
+                        Moke.hydrateNode(el);
+                    });
+                    return this;
+                },
                 css(property, value){
                     this.nodes.forEach(el => el.style[property] = value);
                     return this;
@@ -796,11 +803,11 @@
 
 })(window);
 
-(function handleInitialRoute() {
-    const path = window.location.pathname;
+(function handleInitialRoute(){
+    const fullPath = window.location.pathname + window.location.search;
     
-    if(path !== '/' && path !== ''){
-        const targetPath = path;
+    if(fullPath !== '/' && fullPath !== ''){
+        const targetPath = fullPath;
         window.history.replaceState({}, '', '/');
         
         if(document.readyState === 'loading'){

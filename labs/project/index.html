@@ -12,10 +12,16 @@
 <body>
     <div class="banner">
         <h1>
-            {{hero.mokeos.title}}
+            
         </h1>
     </div>
     <script src="/src/components/MokeSDK/index.js"></script>
     <script src="/src/utils/injector.js"></script>
+    <script>
+        Moke.import({
+            piece: 'ProjectView',
+            def_route: true
+        });
+    </script>
 </body>
 </html>
