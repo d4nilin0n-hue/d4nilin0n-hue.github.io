@@ -1,4 +1,6 @@
 function sendMail(name, body){
+    const original = name;
+
     if(name.trim() == "" || !name){
         alert('Not a valid name.');
         return;
@@ -15,4 +17,5 @@ function sendMail(name, body){
     const mailURL = `mailto:d4nilin0n@icloud.com?subject=${encodeURIComponent(name + ' Consult')}&body=${encodeURIComponent(body)}`;
 
     window.location.href = mailURL;
+    Moke.alert(`Thanks ${original}! I'll get back to you soon.`);
 }

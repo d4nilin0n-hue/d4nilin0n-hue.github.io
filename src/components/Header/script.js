@@ -1,6 +1,9 @@
 /*
-    Header Version 1.0
-    Made by: Daniel Limón, for: daniellimon.com
+    Header
+    Version 1.3
+
+    Made by: Daniel Limón
+    See more atdaniellimon.github.io
 */
 
 (async function(){
@@ -19,7 +22,7 @@
     <option value="/labs/">${translation.header.labs}</option>
     <option value="/services/">${translation.header.services}</option>
     <option value="/aboutme/">${translation.header.about_me}</option>
-    <option value="/contact/">${translation.header.contact}</option>
+    <option value="/contact/">${translation.header.contact}</li>
 </select>`;
 
     const headerCSS = `header{
@@ -41,6 +44,7 @@
     box-shadow: 0px 10px 43px 0px rgba(0,0,0,0.2);
     -webkit-box-shadow: 0px 10px 43px 0px rgba(0,0,0,0.2);
     -moz-box-shadow: 0px 10px 43px 0px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.35);
 }
 header img{
     height: 40px;
@@ -66,8 +70,6 @@ header ul.right{
 }
 header ul li{
     list-style: none;
-    /*margin-left: 30px;
-    margin-right: 30px;*/
     letter-spacing: 0.05em;
     transition: transform .5s, filter .2s, text-shadow .1s;
     cursor: pointer;
@@ -89,15 +91,15 @@ header ul li:active{
 header .cursor{
     position: absolute;
     bottom: 0;
-    left: calc(50% - 50px);
+    left: 0; /* Punto cero nativo del contenedor */
     width: 100px;
     height: 3px;
     background: rgba(0, 0, 0, .3);
-    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1), height .2s;
+    transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), width 0.5s cubic-bezier(0.19, 1, 0.22, 1), height .2s;
     will-change: transform, width;
     pointer-events: none;
     z-index: 0;
-    transform-origin: center;
+    transform-origin: left center; /* Corregido: Sin coma para sintaxis CSS válida */
 }
 header select{
     display: none;
@@ -130,7 +132,7 @@ div[header-gradient]{
     left: 0;
     width: 100%;
     height: calc(4vw + 50px);
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 100%);z
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 100%);
 }
     
 div[header-space]{
@@ -138,7 +140,7 @@ div[header-space]{
     margin: 0;
     margin-bottom: calc(4vw + 50px);
 }`;
-    var headerTimeout, temp_header, current_option, activeLi, logoPos, temp_header_space, temp_header_gradient;
+    var headerTimeout, temp_header, current_option, activeLi, logoPos, temp_header_space, temp_header_gradient, lastX, headerRect, originalX, originalWidth;
 
     function render(){
         temp_header = document.createElement('header');
@@ -162,18 +164,20 @@ div[header-space]{
         current_option = temp_header.querySelector(`select option[value="${window.location.pathname}"]`);
         activeLi = temp_header.querySelector(`li[data-page="${window.location.pathname}"]`);
     }
+
     function renderPositions(){
         logoPos = temp_header.querySelector('header img').getBoundingClientRect();
-        /* 
-            Why onmouseover and not addEventListener?
-            Because onmouseover rewrites the previous assigned callback,
-            while addEventListener does not and stack them up
-            leading to a crappy UI and UX
-        */
+        headerRect = temp_header.getBoundingClientRect();
+
         temp_header.querySelectorAll('ul li').forEach((el) => {
             el.onmouseover = () => {
                 var rect = el.getBoundingClientRect();
-                changeCursorPos(rect.left, rect.width);
+                var localX = rect.left - headerRect.left;
+                changeCursorPos(localX, rect.width);
+            }
+
+            el.onmouseleave = () => {
+                toOriginalPos();
             }
         });
 
@@ -187,7 +191,10 @@ div[header-space]{
         }
 
         temp_header.querySelector('img').onmouseover = () => {
-            changeCursorPos(logoPos.left - 110, logoPos.width);
+            centerCursor();
+        }
+        temp_header.querySelector('img').onmouseleave = () => {
+            toOriginalPos();
         }
 
         temp_header.querySelector('img').onclick = () => {
@@ -213,29 +220,66 @@ div[header-space]{
             current_option.setAttribute("selected", "true");
         }
 
+        const cursor = temp_header.querySelector('.cursor');
+        
         if(window.location.pathname != '/' && activeLi){
-            temp_header.querySelector('.cursor').style.transition = 'none';
-            let cursorX = temp_header.querySelector(`li[data-page="${window.location.pathname}"]`).getBoundingClientRect().left;
-            temp_header.querySelector('.cursor').style.left = `calc(${cursorX}px - 70px)`;
+            cursor.style.transition = 'none';
+            
+            let activeRect = activeLi.getBoundingClientRect();
+            let localActiveX = activeRect.left - headerRect.left;
+            
+            originalX = localActiveX;
+            originalWidth = activeRect.width;
+            
+            cursor.style.width = `${originalWidth}px`;
+            cursor.style.transform = `translateX(${originalX}px)`;
+            lastX = originalX;
+            
             setTimeout(() => {
-                temp_header.querySelector('.cursor').style.transition = 'all 0.5s cubic-bezier(0.19, 1, 0.22, 1), height .2s';
+                cursor.style.transition = 'transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), width 0.5s cubic-bezier(0.19, 1, 0.22, 1), height .2s';
+            }, 100);
+        } else {
+            originalX = logoPos.left - headerRect.left;
+            originalWidth = logoPos.width;
+            
+            cursor.style.transition = 'none';
+            cursor.style.width = `${originalWidth}px`;
+            cursor.style.transform = `translateX(${originalX}px)`;
+            lastX = originalX;
+            
+            setTimeout(() => {
+                cursor.style.transition = 'transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), width 0.5s cubic-bezier(0.19, 1, 0.22, 1), height .2s';
             }, 100);
         }
     }
 
-    function changeCursorPos(x, width){
-        /*
-            Clears current interval so cursor never crashes out
-        */
-        clearTimeout(headerTimeout);
+    function centerCursor(){
+        var localLogoX = logoPos.left - headerRect.left;
+        changeCursorPos(localLogoX, logoPos.width);
+    }
 
-        temp_header.querySelector('.cursor').style.left = `calc(${x}px - 10px - ${width}px / 2)`;
-        temp_header.querySelector('.cursor').style.height = '2px';
-        temp_header.querySelector('.cursor').style.transform = 'scaleX(1.2)';
+    function toOriginalPos(){
+        changeCursorPos(originalX, originalWidth);
+    }
+
+    function changeCursorPos(localX, width){
+        clearTimeout(headerTimeout);
+        const cursor = temp_header.querySelector('.cursor');
+
+        cursor.style.width = `${width}px`;
+        cursor.style.height = '2px';
+
+        if(Math.abs(localX - lastX) > 50){
+            cursor.style.transform = `translateX(${localX}px) scaleX(1.1)`;
+        } else {
+            cursor.style.transform = `translateX(${localX}px)`;
+        }
+        lastX = localX;
+
         headerTimeout = setTimeout(() => {
-            temp_header.querySelector('.cursor').style.transform = 'none';
-            temp_header.querySelector('.cursor').style.height = '3px';
-        }, 200);
+            cursor.style.transform = `translateX(${localX}px) scaleX(1)`;
+            cursor.style.height = '3px';
+        }, 250);
     }
     
     window.addEventListener('resize', () => {

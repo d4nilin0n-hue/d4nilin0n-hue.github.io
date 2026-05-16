@@ -10,6 +10,7 @@
             return response.json();
         }).then((json) => {
             experiments = json;
+            Moke.Hydration.register(experiments);
         });
     }
 
@@ -46,6 +47,7 @@
             document.querySelector('.labs-grid').appendChild(lab_card);
         }
     }
+
     await getExperiments();
     await renderExperiments();
 })();

@@ -51,5 +51,32 @@
         "href": "https://github.com/atdaniellimon/MokeDrive",
         "description": "{{labs.mokeinfotainment.description}}",
         "short_desc": "{{labs.mokeinfotainment.short_desc}}"
+    },
+    "Newton": {
+        "name": "Newton AI",
+        "version": "1.0",
+        "status": "Prototype",
+        "langs": [
+            "Python",
+            "HTML",
+            "CSS",
+            "JavaScript"
+        ],
+        "href": "https://github.com/atdaniellimon/NewtonAI",
+        "description": "{{labs.newton.description}}",
+        "short_desc": "{{labs.newton.short_desc}}"
+    },
+    "Glaze": {
+        "name": "Glaze",
+        "version": "1.0",
+        "status": "Stable",
+        "langs": [
+            "HTML",
+            "CSS",
+            "JavaScript"
+        ],
+        "href": "https://github.com/atdaniellimon/Glaze",
+        "description": "{{labs.glaze.description}}",
+        "short_desc": "{{labs.glaze.short_desc}}"
     }
 }

@@ -15,7 +15,7 @@
         document.title = "Daniel Limon";
     }
 
-    var icn, touch, translations, header, footer;
+    var icn, touch, translations, header, footer, MokeSDK;
     icn = document.createElement('link');
     icn.setAttribute('rel', 'shortcut icon');
     icn.href = '/src/assets/img/logo_min.png';
@@ -24,9 +24,6 @@
     touch = document.createElement('link');
     touch.setAttribute('rel', 'apple-touch-icon');
     touch.href = '/src/assets/img/logo_min.png';
-
-    document.head.appendChild(icn);
-    document.head.appendChild(touch);
 
     const cfgRequest = new Request(`${window.location.pathname}cfg.json`);
     var settings;
@@ -41,44 +38,21 @@
     })
 
     window.addEventListener("Translations_Ready", () => {
+        Moke.Hydration.register(translation);
+        document.body.classList.add('ready');
         if(settings?.header !== false){
-            header = document.createElement('script');
-            header.src = '/src/components/header/header.js';
-
-            document.body.appendChild(header);
+            Moke.import({
+                piece: 'Header',
+                def_route: true
+            });
         }
 
         if(settings?.footer !== false){
-            footer = document.createElement('script');
-            footer.src = '/src/components/footer/footer.js';
-
-            document.body.appendChild(footer);
+            Moke.import({
+                piece: 'Footer',
+                def_route: true
+            });
         }
-
-        document.body.classList.add('ready');
-        const elements = document.querySelectorAll('h1, p, a, h2, h3, h4, h5, span, li, button, select, option');
-
-        elements.forEach((e) => {
-            const text = e.innerHTML;
-            const matches = text.match(/\{\{\s*(.*?)\s*\}\}/g);
-
-            if (matches) {
-                let newText = text;
-
-                matches.forEach(match => {
-                    const path = match.replace(/\{\{\s*|\s*\}\}/g, '');
-
-                    const value = path.split('.').reduce((obj, key) => {
-                        return (obj && obj[key] !== undefined) ? obj[key] : null;
-                    }, translation);
-
-                    const replacement = value !== null ? value : `[Missing: ${path}]`;
-                    newText = newText.replace(match, replacement);
-                });
-
-                e.innerHTML = newText;
-            }
-        });
 
         /* 
             Kidnap browser's default callback and change it with my own
@@ -95,27 +69,9 @@
             }
         });
     });
-    translations = document.createElement('script');
-    translations.src = '/src/utils/languages.js';
-    document.body.prepend(translations);
-})();
 
-const alert = (content = "") => {
-    if(document.querySelector("alert-container")) return;
-    const alert_element = document.createElement("alert-element");
-    const alert_container = document.createElement("alert-container");
-    alert_element.innerHTML = `
-        <alert-text>${content}</alert-text>
-        <alert-button><p>Ok</p></alert-button>
-    `;
-
-    alert_element.querySelector("alert-button").addEventListener("click", () => {
-        alert_element.style.opacity = "0";
-        alert_container.style.opacity = "0";
-        setTimeout(() => {
-            alert_container.remove();
-        }, 500);
+    Moke.import({
+        piece: 'Translations',
+        def_route: true
     });
-    alert_container.appendChild(alert_element);
-    document.body.appendChild(alert_container);
-};
+})();

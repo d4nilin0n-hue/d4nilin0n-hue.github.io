@@ -1,6 +1,9 @@
 /*
-    Footer Version 1.0
-    Made by: Daniel Limón, for: daniellimon.com
+    Footer
+    Version 1.0
+
+    Made by: Daniel Limón
+    See more atdaniellimon.github.io
 */
 
 (async function(){
@@ -33,7 +36,7 @@
 
     const footerCSS = `footer{
     margin-top: 10%;
-    width: 96vw;
+    width: 96%;
     height:500px;
     max-width: 1500px;
     background: rgba(221, 221, 221, 0.4);
@@ -42,8 +45,11 @@
     -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.3);
     margin: 4vw auto 2vw;
+    margin-bottom: 0;
     padding: 40px 20px 20px;
-    margin-left: 2vw;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.35);
 }
 
 .footer-container {

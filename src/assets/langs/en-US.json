@@ -19,6 +19,9 @@
         },
         "contact": {
             "title": "Contact Daniel"
+        },
+        "mokeos": {
+            "title": "mokeOS."
         }
     },
     "footer": {
@@ -27,7 +30,7 @@
         "status_title": "Availability",
         "status_available": "Available for new projects",
         "handcraft": "Handcrafted in Mexico",
-        "donot": "© 2026 Daniel Limón. Do not copy."
+        "donot": "© 2026 Daniel Limón. All rights reserved."
     },
     "labs": {
         "mokeos": {
@@ -42,6 +45,12 @@
         },
         "mokeinfotainment": {
             "short_desc": "MokeCar (or Moke Infotainment) is a mock infotainment system based on web technologies with the goal of researching and testing out how they work."
+        },
+        "newton": {
+            "short_desc": "Newton is an AI assistant created by Daniel Limón. Unlike most models, Newton is trained to prioritize honesty over usefulness — he will explicitly say \"I don't know\" rather than invent an answer. Newton can also operate autonomously: given a goal, he can plan, execute code in a sandboxed environment, detect bugs with his \"Microscope\" tool, and iterate until success or graceful failure."
+        },
+        "glaze": {
+            "short_desc": "Glaze is a social media platform focused on posts, photos and videos. With its included photo editor, it makes Glaze good for instant photos."
         }
     }
 }

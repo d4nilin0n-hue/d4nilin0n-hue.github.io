@@ -18,7 +18,13 @@
     <div class="labs-grid">
         
     </div>
+    <script src="/src/components/MokeSDK/index.js"></script>
     <script src="/src/utils/injector.js"></script>
-    <script src="/src/utils/labs.js"></script>
+    <script>
+        Moke.import({
+            piece: 'Labs',
+            def_route: true
+        });
+    </script>
 </body>
 </html>
